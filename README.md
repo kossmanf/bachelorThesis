@@ -42,6 +42,30 @@ extractSymbolsFromPreTrainingData.py: Extrahiert Symbole aus den Klauseln und in
 collectDocuments.py: Fasst die Dokumente in einer Datei zusammen für die spätere Berechnung von TF-IDF.
 processPreTrainingData.py: Berechnet für jedes Symbol aus dem Wissensbasis für jeden erbrachten Beweis basierend auf diesen und allen anderen Beweisen einen Similarity Score für positive Symbole in Form von TF-IDF-Werten, für negative Symbole in Form von Häufigkeit und für neutrale Symbole den Wert 0.
 
+9. generateTrainingTestDataForLM
+In diesem Ordner befinden sich alle Dateien zur Erzeugung von Trainings- und Testdaten für das Sprachmodell.
+generateTrainingData.py: Datei zur Erzeugung von Trainings- und Testdaten.
+trainingDataLM
+
+10. trainingDataLM
+Dieser Ordner enthält sämtliche Trainingsdaten für das Sprachmodell.
+trainingData_10highestScores.pt: Trainingsdaten mit den 10 am höchsten bewerteten Symbolen.
+trainingData_10lowestScores.pt: Trainingsdaten mit den 10 am niedrigsten bewerteten Symbolen.
+trainingData_10highestScores_10lowestScores.pt: Trainingsdaten mit den 10 am höchsten und den 10 am niedrigsten bewerteten Symbolen.
+trainingData_all.pt: Trainingsdaten mit allen Symbolen.
+
+11. testDataLM
+In diesem Ordner befinden sich sämtliche Daten zum Testen des Sprachmodells.
+testData_10highestScores.pt: Testdaten mit den 10 am höchsten bewerteten Symbolen.
+testData_10lowestScores.pt: Testdaten mit den 10 am niedrigsten bewerteten Symbolen.
+testData_10highestScores_10lowestScores.pt: Testdaten mit den 10 am höchsten und den 10 am niedrigsten bewerteten Symbolen.
+testData_all.pt: Testdaten mit allen Symbolen.
+
+12. training
+Hier sind Dateien für das Training neuronaler Netze abgelegt.
+training_cosineEmbeddingLoss.py: Datei für das Training mittels der Cosine Embedding Loss Funktion.
+training_mseLoss.py: Datei für das Training mittels der Mean Squared Error Loss Funktion.
+
 Hinweis: Es ist nicht sichergestellt, dass alle für ein Programm benötigten Dateien in den entsprechenden Ordnern liegen. Aus diesem Grund kann es zu Fehlern kommen beim Importieren oder Laden von Dateien.
 
 # bachelorThesis
@@ -88,5 +112,29 @@ extractSymbolsFromPreTrainingData.py: Extracts symbols from the clauses and inte
 collectDocuments.py: Collects the documents in a file for the later calculation of TF-IDF.
 processPreTrainingData.py: Calculates the training data.
 processPreTrainingData.py: Calculates a similarity score for each symbol from the knowledge base for each proof based on the proof and all other proofs in the form of TF-IDF values for positive symbols, in the form of frequency for negative symbols and the value 0 for neutral symbols.
+
+9. generateTrainingTestDataForLM
+This folder contains all the files for generating training and test data for the language model.
+generateTrainingData.py: File for generating training and test data.
+trainingDataLM
+
+10.trainingDataLM
+This folder contains all the training data for the language model.
+trainingData_10highestScores.pt: Training data with the 10 highest scoring symbols.
+trainingData_10lowestScores.pt: Training data with the 10 lowest scoring symbols.
+trainingData_10highestScores_10lowestScores.pt: Training data with the 10 highest and 10 lowest scoring symbols.
+trainingData_all.pt: Training data with all symbols.
+
+11. testDataLM
+This folder contains all the data for testing the language model.
+testData_10highestScores.pt: Test data with the 10 highest scoring symbols.
+testData_10lowestScores.pt: Test data with the 10 lowest scoring symbols.
+testData_10highestScores_10lowestScores.pt: Test data with the 10 highest and 10 lowest scoring symbols.
+testData_all.pt: Test data with all symbols.
+
+12. training
+Files for training neural networks are stored here.
+training_cosineEmbeddingLoss.py: File for training using the cosine embedding loss function.
+training_mseLoss.py: File for training using the Mean Squared Error Loss function.
 
 Note: It is not guaranteed that all files required for a program are located in the corresponding folders. For this reason, errors may occur when importing or loading files.
