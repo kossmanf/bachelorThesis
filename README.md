@@ -73,7 +73,7 @@ Repository for the bachelor thesis on Goal-Directed Reasoning in First-Order Log
 
 Explanation of the folders:
 
-1 Categorize Goals:
+1. Categorize Goals:
 Contains files for categorizing goals from AdimenSumo and ApplyingCWA.
 categorize_goals.py: This file is used to categorize goals from AdimenSUMO and ApplyingCWA.
 
@@ -81,7 +81,7 @@ categorize_goals.py: This file is used to categorize goals from AdimenSUMO and A
 Contains files for generating axioms from AdimenSumo for proofs with the eprover.
 generateAxioms.py: Generates axioms needed for proofs with the eprover by combining the axioms from AdimenSumo with targets.
 
-3 Generating Proofs:
+3. Generating Proofs:
 Contains files for generating proofs using the eprover.
 generate_proofs.py: Used to generate proofs using the generated axiom files with the Eprover. An installed and functioning version of the Eprover is required.
 
@@ -101,11 +101,11 @@ parseTree.py: Creates a parse tree for a TPTP formula.
 parseTreeExtraction.py: Enables the extraction of certain operators (function symbols, constant symbols, variables, constants) from the parse tree.
 printTree.py: Visualizes the parse tree.
 
-7 Convert to Natural Language:
+7. Convert to Natural Language:
 This folder contains a file for converting formulas to natural language.
 convertParseTreeToNaturalLanguage.py: Converts a formula in TPTP syntax into natural language via the parse tree.
 
-8 Generating Pre-training Data:
+8. Generating Pre-training Data:
 This folder contains files for pre-processing proofs to generate training data.
 generatePositiveAndNegativePreTrainingData.py: Separates positive training data (clauses which appears in the proof) from negative training data ( clauses which does not appear in the proof) and extracts clauses and proof targets from the provided proofs.
 extractSymbolsFromPreTrainingData.py: Extracts symbols from the clauses and interprets them as documents in order to calculate training data later.
