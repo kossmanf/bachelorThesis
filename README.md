@@ -118,7 +118,7 @@ This folder contains all the files for generating training and test data for the
 generateTrainingData.py: File for generating training and test data.
 trainingDataLM
 
-10.trainingDataLM
+10. trainingDataLM
 This folder contains all the training data for the language model.
 trainingData_10highestScores.pt: Training data with the 10 highest scoring symbols.
 trainingData_10lowestScores.pt: Training data with the 10 lowest scoring symbols.
