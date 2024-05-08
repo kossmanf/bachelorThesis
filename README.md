@@ -44,24 +44,19 @@ processPreTrainingData.py: Berechnet für jedes Symbol aus dem Wissensbasis für
 
 9. generateTrainingTestDataForLM
 In diesem Ordner befinden sich alle Dateien zur Erzeugung von Trainings- und Testdaten für das Sprachmodell.
-generateTrainingData.py: Datei zur Erzeugung von Trainings- und Testdaten.
-trainingDataLM
+generateTestAndTrainingData.py: Datei zur Erzeugung von Trainings- und Testdaten.
 
-10. trainingDataLM
-Dieser Ordner enthält sämtliche Trainingsdaten für das Sprachmodell.
-trainingData_10highestScores.pt: Trainingsdaten mit den 10 am höchsten bewerteten Symbolen.
-trainingData_10lowestScores.pt: Trainingsdaten mit den 10 am niedrigsten bewerteten Symbolen.
-trainingData_10highestScores_10lowestScores.pt: Trainingsdaten mit den 10 am höchsten und den 10 am niedrigsten bewerteten Symbolen.
-trainingData_all.pt: Trainingsdaten mit allen Symbolen.
+11. trainingDataLM
+Dieser Ordner enthält alle Trainingsdaten für das Sprachmodell:
+trainingDataK2.pt: Jeder Datensatz beinhaltet das Doppelte an negativen im Vergleich zu positiven Symbolen pro Beweis.
+trainingDataK5.pt: Jeder Datensatz beinhaltet fünfmal mehr negative als positive Symbole pro Beweis.
 
-11. testDataLM
-In diesem Ordner befinden sich sämtliche Daten zum Testen des Sprachmodells.
-testData_10highestScores.pt: Testdaten mit den 10 am höchsten bewerteten Symbolen.
-testData_10lowestScores.pt: Testdaten mit den 10 am niedrigsten bewerteten Symbolen.
-testData_10highestScores_10lowestScores.pt: Testdaten mit den 10 am höchsten und den 10 am niedrigsten bewerteten Symbolen.
-testData_all.pt: Testdaten mit allen Symbolen.
+12. testDataLM
+Dieser Ordner umfasst alle Testdaten für das Sprachmodell:
+testDataK2.pt: Für jeden Beweis enthält der Datensatz doppelt so viele negative wie positive Symbole.
+testDataK5.pt: Für jeden Beweis enthält der Datensatz fünfmal mehr negative als positive Symbole.
 
-12. training
+13. training
 Hier sind Dateien für das Training neuronaler Netze abgelegt.
 training_cosineEmbeddingLoss.py: Datei für das Training mittels der Cosine Embedding Loss Funktion.
 training_mseLoss.py: Datei für das Training mittels der Mean Squared Error Loss Funktion.
@@ -115,22 +110,17 @@ processPreTrainingData.py: Calculates a similarity score for each symbol from th
 
 9. generateTrainingTestDataForLM
 This folder contains all the files for generating training and test data for the language model.
-generateTrainingData.py: File for generating training and test data.
-trainingDataLM
+generateTestAndTrainingData.py: File for generating training and test data.
 
 10. trainingDataLM
-This folder contains all the training data for the language model.
-trainingData_10highestScores.pt: Training data with the 10 highest scoring symbols.
-trainingData_10lowestScores.pt: Training data with the 10 lowest scoring symbols.
-trainingData_10highestScores_10lowestScores.pt: Training data with the 10 highest and 10 lowest scoring symbols.
-trainingData_all.pt: Training data with all symbols.
+This folder contains all training data for the language model:
+trainingDataK2.pt: Each data set contains twice as many negative symbols as positive symbols per proof.
+trainingDataK5.pt: Each data set contains five times more negative than positive symbols per proof.
 
 11. testDataLM
-This folder contains all the data for testing the language model.
-testData_10highestScores.pt: Test data with the 10 highest scoring symbols.
-testData_10lowestScores.pt: Test data with the 10 lowest scoring symbols.
-testData_10highestScores_10lowestScores.pt: Test data with the 10 highest and 10 lowest scoring symbols.
-testData_all.pt: Test data with all symbols.
+This folder contains all test data for the language model:
+testDataK2.pt: For each proof, the data set contains twice as many negative symbols as positive symbols.
+testDataK5.pt: For each proof, the data set contains five times as many negative symbols as positive symbols.
 
 12. training
 Files for training neural networks are stored here.
