@@ -38,7 +38,7 @@ def calculatePredictedScore(verbalizedGoal, symbol, tokenizer, model):
     return cos(goalEmbedding, symbolEmbedding).item()
 
 # Load the test data
-data = torch.load('testDataK2.pt')
+data = torch.load('testData_random_10pos_10neg.pt')
 symbolNames = data['symbolNames']
 verbalizedGoals = data['verbalizedGoals']
 normalizedScores = data['normalizedScores']
