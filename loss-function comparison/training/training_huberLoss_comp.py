@@ -157,7 +157,7 @@ if __name__ == "__main__":
                 state[k] = v.to(device)
 
     # specifying the criterion
-    criterion = HuberLoss(reduction='mean', delta=0.05)
+    criterion = HuberLoss(reduction='mean', delta=0.3)
 
     # Check if there's a backed-up model and load it
     checkpoint_file = 'checkpoint_epoch_0.pt'
