@@ -1,7 +1,9 @@
+# Modules to be imported
 import os
 import re
 import shutil
 
+# program description
 # This program categorizes goals based on their names.
 
 # Configuration constants
