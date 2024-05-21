@@ -1,7 +1,9 @@
-import os
-
 # Importing necessary modules
 import shutil
+import os
+
+# Program description
+# This program takes the Adimen-SUMO axioms and a goal and combines them into a file that can be solved by EProver.
 
 # Configuration constants
 
