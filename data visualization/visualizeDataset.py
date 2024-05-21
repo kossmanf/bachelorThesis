@@ -1,5 +1,10 @@
+# Modules to be imported
 import torch
 import matplotlib.pyplot as plt
+
+# Program description
+# This program takes a dataset and plots it in a scatter plot 
+# If the dataset is really big it can also be grouped with the group function before plotting
 
 # loading the dataset either test or training data
 data = torch.load('trainingData.pt')  # Load data from file
