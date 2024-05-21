@@ -4,7 +4,7 @@ import re
 import shutil
 
 # program description
-# This program categorizes goals based on their names.
+# This program categorizes goals based on their names by creating a folder for every category and saving the file in the apropriate folder.
 
 # Configuration constants
 
