@@ -1,6 +1,10 @@
+# Modules to be imported
 from tptpParser.parseTree import generateParseTree
 from  tptpParser.parseTreeExtraction import getOP
 from tptpParser.printTree import print_tree_inorder
+
+# program description
+# This program takes a parse tree and a mapping file for the Adimen SUMO symbol names and converts the formula represented by the parse tree into a sentence in natural language.
 
 # Function to split camel case words
 def splitCamelCase(word):
