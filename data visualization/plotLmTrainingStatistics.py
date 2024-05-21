@@ -3,7 +3,7 @@ import json
 import matplotlib.pyplot as plt
 
 # Program description
-#  This program takes the mean error the mean absolute error and the standard deviation of the absolute error over the trained epochs and plots them in a line chart
+# This program takes the mean error the mean absolute error and the standard deviation of the absolute error over the trained epochs and plots them in a line chart
 
 # Load the bootstrapped data from JSON file
 with open("bootstrapped_data.json", "r") as infile:
