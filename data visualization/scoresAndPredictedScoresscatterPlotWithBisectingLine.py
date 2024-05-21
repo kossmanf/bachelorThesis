@@ -1,8 +1,17 @@
+# Modules to be imported
 import json
 import matplotlib.pyplot as plt
 
-# Load evaluation data from a JSON file corresponding to the 0 epoch
-with open(f'evaluation_epoch_{1}.json', 'r') as file:
+# Program description
+# This program takes the real scores from the training data and the calculated predicted scores from the lm of an epoch and plots them in a scatter plot with a bisecting line
+
+# Parameters
+
+# Determines the epoch to load the correct JSON file containing the evaluation data for that epoch
+epoch = 1
+
+# Load evaluation data from a JSON file corresponding to the epoch
+with open(f'evaluation_epoch_{epoch}.json', 'r') as file:
     # Load evaluation data from a JSON file corresponding to the current epoch
     json_data = json.load(file)
     predicted_values = json_data['predictedScores_trained']
@@ -35,7 +44,7 @@ def plot_data(x_data, y_data):
     plt.show()
 
 
-# Example datasets
+# Datasets
 x_dataset = actual_values
 y_dataset = predicted_values
 
