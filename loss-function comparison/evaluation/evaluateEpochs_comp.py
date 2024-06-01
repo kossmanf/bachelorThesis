@@ -10,6 +10,10 @@ import random
 from tqdm import tqdm
 import torch
 
+# This program processes different backed-up epoch files by extracting the state disc to evaluate the trained model at each epoch.
+# It assesses the performance of both the trained and untrained models using test data. 
+# For each epoch, the program generates an evaluation file containing the calculated residuals (predicted score - actual score), along with the actual and predicted scores.
+
 # device and tokenizer 
 device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 
@@ -31,6 +35,7 @@ def mean_pooling(model_output, attention_mask):
     input_mask_expanded = attention_mask.unsqueeze(-1).expand(token_embeddings.size()).float()
     return torch.sum(token_embeddings * input_mask_expanded, 1) / torch.clamp(input_mask_expanded.sum(1), min=1e-9)
 
+# Function ro generate the embeddings 
 def getEmbeddings(model, tokenizer, sentences):
     # Tokenize sentences
     encoded_input = tokenizer(sentences, padding=True, truncation=True, return_tensors='pt')
@@ -45,6 +50,7 @@ def getEmbeddings(model, tokenizer, sentences):
 
     return sentence_embeddings
 
+# Function to calculate the predicted score based with the cosine similarity based on the embeddings
 def calculatePredictedScore(verbalizedGoal, symbol, tokenizer, model):
     # calculate the goal and the symbol embedding 
     goalEmbedding = getEmbeddings(model, tokenizer, [verbalizedGoal])
@@ -53,6 +59,7 @@ def calculatePredictedScore(verbalizedGoal, symbol, tokenizer, model):
     # calculate the cosine similarity between the embeddings
     cos = CosineSimilarity()
     predictedScore = cos(goalEmbedding, symbolEmbedding).item()
+
     return predictedScore
 
 # Load the test data
@@ -137,6 +144,8 @@ for epoch in tqdm(range(0, 3)):
         'predictedScores_untrained': predictedScores_untrained,
         'amountOfTestData': amount_of_samples,
     }
+
+    # save the evaluation data for the epoch
     with open(f'evaluation_epoch_{epoch}.json', 'w') as f:
         json.dump(evaluation_data, f)
     
