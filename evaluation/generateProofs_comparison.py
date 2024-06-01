@@ -81,9 +81,6 @@ mapOperatorsToWords = {
     'false': 'is false',
 }
 
-
-# This program creates a file structure for the proofs furthermore it tries to find proofs with the eprover for all the axioms files and stores the output in the proofs file structure 
-
 # configuration constants
 
 # path to the axioms
@@ -187,8 +184,7 @@ with open(_proofLogFilePath, "r+") as proofLog:
                         # calculate the embedding
                         conjectureEmbedding = getEmbeddings(trained_model, tokenizer, [sentenceInNaturalLanguage])
                         
-
-                        print(sentenceInNaturalLanguage)
+                        # calculate the similarity scores together with the funciton symbols
                         similarities = getSimilarities(conjectureEmbedding, 5, 0, return_all=True)
                         
                         # generate the parameter string for the fun weight function

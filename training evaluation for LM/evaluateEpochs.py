@@ -23,6 +23,7 @@ original_model = AutoModel.from_pretrained('sentence-transformers/all-MiniLM-L6-
 original_model.to(device)
 print(f"model moved to {device}")
 
+# Set the model into evaluation mode
 original_model.eval()
 
 #Mean Pooling - Take attention mask into account for correct averaging
