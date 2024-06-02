@@ -1,8 +1,9 @@
-from transformers import AutoTokenizer, AutoModel
+# Modules to be imported
+from transformers import AutoModel
 import torch
 
-# Load the tokenizer
-tokenizer = AutoTokenizer.from_pretrained('sentence-transformers/all-MiniLM-L6-v2')
+# program description
+# This script loads the original model from Hugging Face and stores its parameters in a state dictionary.
 
 # Load the model
 model = AutoModel.from_pretrained('sentence-transformers/all-MiniLM-L6-v2')

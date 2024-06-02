@@ -28,6 +28,10 @@ def splitAtUnderscores(word):
     return newWord
 
 # Function to generate natural language sentence from parse tree
+# The node parameter refers to the first node in the parse tree.
+# The mapOperatorToWords is a dictionary to translate the different operators into natural language.
+# The wordMapping is a json file used to convert logical symbols into natural language.
+
 def generateSentence(node, mapOperatorsToWords, wordMapping):
     sentence = ''
     

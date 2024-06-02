@@ -128,7 +128,3 @@ training_cosineEmbeddingLoss.py: File for training using the cosine embedding lo
 training_mseLoss.py: File for training using the Mean Squared Error Loss function.
 
 Note: It is not guaranteed that all files required for a program are located in the corresponding folders. For this reason, errors may occur when importing or loading files.
-
-
-
-----

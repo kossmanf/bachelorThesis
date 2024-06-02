@@ -1,6 +1,5 @@
 import json
 import numpy as np
-import pandas as pd
 import matplotlib.pyplot as plt 
 
 # Reading JSON data from a file
@@ -112,24 +111,21 @@ def calc_average_percentage_reduction(xData, yData):
     sortedPercentageReduciton = np.sort(percentage_reductions)
     trimedPercentageReduciton = [x for x in percentage_reductions if x not in sortedPercentageReduciton[:trimValue]]
 
-    
     # Set up a figure with two subplots (1 row, 2 columns)
     plt.figure(figsize=(12, 6))  # Adjust the size as needed
 
     plt.subplot(1, 2, 1)  # (rows, columns, subplot number)
-    plt.bar(range(len(percentage_reductions)), percentage_reductions, color='gray')
+    plt.scatter(range(len(percentage_reductions)), percentage_reductions, color='gray', s=5)
     plt.title('Clause reduction percentages')
     plt.xlabel('Proof process')
     plt.ylabel('Clause reduction percentage ')
 
     plt.subplot(1, 2, 2)
-    plt.bar(range(len(trimedPercentageReduciton)), trimedPercentageReduciton, color='gray')
+    plt.scatter(range(len(trimedPercentageReduciton)), trimedPercentageReduciton, color='gray', s=5)
     plt.title('Clause reduction percentages trimed')
     plt.xlabel('Proof process')
     plt.ylabel('Clause reduction percentage ')
 
-    # Show the figure with both subplots
-    plt.tight_layout()  # Adjust subplots to fit into figure area.
     plt.show()
 
     # Compute the basic statistics
