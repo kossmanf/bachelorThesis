@@ -5,6 +5,7 @@ import shutil
 
 # program description
 # This program categorizes goals based on their names by creating a folder for every category and saving the file in the apropriate folder.
+# This categorization is used to determine the relative difficulty of solving proof tasks across various categories.
 
 # Configuration constants
 

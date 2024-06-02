@@ -8,6 +8,7 @@ import json
 
 # Program description
 # This program creates a file structure for proofs and attempts to find proofs using E prover for all the axioms files, storing the output in the proofs file structure.
+# The original categorical folder structure of the proof tasks will be maintained.
 
 # Configuration Constants
 

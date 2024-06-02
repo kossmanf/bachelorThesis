@@ -18,6 +18,7 @@ import math
 
 # Program description
 # This program creates a file structure for proofs and attempts to find proofs using Eprover with a language model as a heuristics for all the axioms files, storing the output in the proofs file structure.
+# The original categorical folder structure of the proof tasks will be maintained.
 
 # configuration constants
 

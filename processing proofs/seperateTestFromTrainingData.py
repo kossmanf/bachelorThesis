@@ -1,7 +1,16 @@
+# Importing necessary modules
 import math
 import shutil
 import random
 import json
+
+# Program description
+# This script processes the 'completed proofs' folder containing successful eprover outputs.
+# It distributes a specified percentage of proofs from each category into a 'training proofs' folder and the remainder into a 'test proofs' folder.
+# The original categorical folder structure will be maintained.
+
+# The 'completed_proofs' folder contains training data for the language model, testing data for model validation.
+# The 'uncompleted_proofs' folder holds files reserved for future evaluations, where the trained language model will be used as a heuristic to attempt solving the goals of the output files again.
 
 # Configuration Constants
 

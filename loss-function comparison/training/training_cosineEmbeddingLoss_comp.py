@@ -1,3 +1,4 @@
+# Importing necessary modules
 import torch
 import json
 import os
@@ -12,6 +13,10 @@ from torch.nn import CosineSimilarity
 import numpy as np
 from tqdm import tqdm  
 import random
+
+# Program description
+# This Program trains the model with a loss functions using a set of random samples of the testing data.
+# This is done to evaluate the trained model's performance using the specified loss function.
 
 # function to load dataset
 class CustomDataset(Dataset):
@@ -69,8 +74,16 @@ def mean_pooling(model_output, attention_mask):
     input_mask_expanded = attention_mask.unsqueeze(-1).expand(token_embeddings.size()).float()
     return torch.sum(token_embeddings * input_mask_expanded, 1) / torch.clamp(input_mask_expanded.sum(1), min=1e-9)
 
-# Inside the train_model() function
-def train_model(model, optimizer, dataloader, criterion, device, epochs, start_epoch=0, start_loss=0.0, lossPoints=[]):
+# function for training the model
+# model: The neural network model that will be trained.
+# optimizer: The loss function used to update the model's weights.
+# dataloader: Provides batches of data, encapsulates dataset iteration.
+# criterion: The loss function used to calculate the discrepancy between predicted and actual outputs.
+# device: The computation device (CPU or GPU) where the model computations are performed.
+# epochs: The total number of times the entire dataset is passed through the model.
+# start_epoch: (optional, default=0) The epoch index at which training begins, useful for resuming training.
+# start_loss: (optional, default=0.0) Initial loss from which the epoch loss accumulation begins, useful when resuming training.
+def train_model(model, optimizer, dataloader, criterion, device, epochs, start_epoch=0, start_loss=0.0):
 
     # set the model into training mode
     model.train()
@@ -114,20 +127,14 @@ def train_model(model, optimizer, dataloader, criterion, device, epochs, start_e
             # optimize the weights
             optimizer.step()
 
-            # add the loss to the total loss
-            total_loss += loss.item()
-
+        # Save the state of the training and the state of the language model after each trained epoch to evaluate the performance after each epoch and as a checkpoint for recovery.
         save_file_name = f"checkpoint_epoch_{epoch}.pt"
         torch.save({
             'epoch': epoch,
             'model_state_dict': model.state_dict(),
             'optimizer_state_dict': optimizer.state_dict(),
-            'lossPoints': lossPoints
         }, save_file_name)
         
-        # append the total loss to the total loss function
-        lossPoints.append(total_loss)
-
 if __name__ == "__main__":
 
     # training parameters
@@ -139,6 +146,7 @@ if __name__ == "__main__":
     device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
     tokenizer = AutoTokenizer.from_pretrained('sentence-transformers/all-MiniLM-L6-v2')
 
+    # initializing the data loader
     dataloader = create_dataloader(data_file, batch_size)
 
     # creating the model and the optimizer
@@ -160,7 +168,6 @@ if __name__ == "__main__":
     # checkpoint_file = 'checkpoint.pt'
     start_epoch = 0
     start_loss = 0.0
-    lossPoints = []
 
     # # check if a checkpoint exists
     # if os.path.exists(checkpoint_file):
@@ -168,10 +175,9 @@ if __name__ == "__main__":
     #     model.load_state_dict(checkpoint['model_state_dict'])
     #     optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
     #     start_epoch = checkpoint['epoch']
-    #     lossPoints = checkpoint['lossPoints']
 
     # training the model
-    train_model(model, optimizer, dataloader, criterion, device, epochs, start_epoch, start_loss, lossPoints)
+    train_model(model, optimizer, dataloader, criterion, device, epochs, start_epoch, start_loss)
 
     # Saving the final model
     torch.save(model.state_dict(), 'final_model.pt')

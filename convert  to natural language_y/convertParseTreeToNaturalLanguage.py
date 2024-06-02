@@ -5,6 +5,8 @@ from tptpParser.printTree import print_tree_inorder
 
 # program description
 # This program takes a parse tree and a mapping file for the Adimen SUMO symbol names and converts the formula represented by the parse tree into a sentence in natural language.
+# This translation into natural language is important for translating the proof tasks 
+# Translating proof tasks into natural language is essential for the heuristic that identifies the most suitable logical symbols and for generating training data for the language model.
 
 # Function to split camel case words
 def splitCamelCase(word):

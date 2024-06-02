@@ -1,5 +1,13 @@
+# Importing necessary modules
 import os
 import shutil
+
+# Program description
+# This program  processes eprover output files in the 'proofs' folder, sorting them into two distinct folders: 
+# 'completed_proofs' for files where proofs were found, and 'uncompleted proofs' for those where proofs were not found.
+# The 'completed_proofs' folder contains training data for the language model, testing data for model validation, and evaluation data for the research project.
+# The 'uncompleted_proofs' folder holds files reserved for future evaluations, where the trained language model will be used as a heuristic to attempt solving the goals of the output files again.
+# The original categorical folder structure will be maintained.
 
 # Clean up existing folder structures for completed and uncompleted proofs, if they exist
 

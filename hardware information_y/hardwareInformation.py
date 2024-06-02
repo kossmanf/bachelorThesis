@@ -6,6 +6,7 @@ import torch
 
 # Program description
 # This program was used to print the hadware information which was used for the research project
+# This is essential for comprehending how the results of the research project were derived.
 
 def getCudaVersion():
     # Returns the CUDA version used by PyTorch or a message if CUDA is not available
