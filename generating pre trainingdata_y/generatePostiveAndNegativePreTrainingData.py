@@ -1,6 +1,17 @@
+# Importing necessary modules
 import os
 import re
 import json
+
+# Program description
+# This program iterates over the output files in the 'trainingProofs' folder.
+# It extracts the conjecture (proof task) and all the processed clauses from each output file.
+# The processed clauses are sorted into two categories:
+# - 'posPreTrainingData' folder contains clauses processed by Eprover that are included in the proof.
+# - 'negPreTrainingData' folder contains clauses processed by Eprover that are not included in the proof.
+# Processed clauses from each output file are saved into seperated JSON file in the folders.
+
+# Configuration constants
 
 # Define the path to the proof folder
 _path_to_proof_folder = './trainingProofs'
@@ -88,10 +99,10 @@ if os.path.exists(_path_to_proof_folder):
 
             # Save positive pre-training data
             if len(pos_pre_training_data_conjecture) > 0:
-                with open(f'./preTrainingData/posPreTrainingData/{category}/posPreTrainingData_owa_{proof[:-5]}.json', 'w') as file:
+                with open(f'./preTrainingData/posPreTrainingData/{category}/posPreTrainingData{proof[:-5]}.json', 'w') as file:
                     json.dump(pos_pre_training_data, file)
 
             # Save negative pre-training data
             if len(neg_pre_training_data_conjecture) > 0:
-                with open(f'./preTrainingData/negPreTrainingData/{category}/negPreTrainingData_owa_{proof[:-5]}.json', 'w') as file:
+                with open(f'./preTrainingData/negPreTrainingData/{category}/negPreTrainingData{proof[:-5]}.json', 'w') as file:
                     json.dump(neg_pre_training_data, file)

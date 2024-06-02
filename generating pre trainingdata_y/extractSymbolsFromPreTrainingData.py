@@ -1,3 +1,4 @@
+# Importing necessary modules
 import os
 import re
 import math
@@ -9,6 +10,16 @@ from parseTree import generateParseTree
 from parseTreeExtraction import getOP
 from printTree import print_tree_inorder
 from parseFormulas import generateSentence
+
+# Program description
+# This program proecesses the clauses which where seperated into two groups: those that appear in the proof and those that do not.
+# The program extracts symbols from these clauses for further analysis.
+
+# For each proof task, a 'document' is created and saved in a JSON File.
+# This document organizes symbols into three categories: 
+# 1. Positive symbols - Symbols from clauses that are processed and appear in a proof.
+# 2. Negative symbols - Symbols from processed clauses that do not appear in a proof.
+# 3. Neutral symbols - Symbols that do not appear in any processed clause.
 
 # Function to split camel case words
 def splitCamelCase(word):
@@ -113,6 +124,7 @@ with open('./extractedSymbolsLog/logFile', 'r+') as proofLog:
                     print('extracting symbols from proof: ' + proof[3:])
                     print('no: ' + str(len(proofsDone)+1))
 
+                    # lists for the positive and negative symbols
                     posSymbols = []
                     negSymbols = []
 
@@ -126,7 +138,7 @@ with open('./extractedSymbolsLog/logFile', 'r+') as proofLog:
 
                     # Checking if negative pre-training data file exists
                     if os.path.exists(os.path.join('./preTrainingData/negPreTrainingData', category, 'neg' + proof[3:])):
-                        with open(os.path.join('./preTrainingData/negPreTrainingData', category, 'neg' + proof[3:])) as proofFile:
+                        with open(os.path.join('./preTrainingData/ ', category, 'neg' + proof[3:])) as proofFile:
                             negData = json.load(proofFile)
                             negClauses = negData[list(negData.keys())[0]]
                             # Extracting symbols from negative clauses

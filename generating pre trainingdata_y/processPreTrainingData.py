@@ -1,4 +1,4 @@
-
+# Importing necessary modules
 import os
 import json
 import math
@@ -6,7 +6,16 @@ from tqdm import tqdm
 from tptpParser.parseTree import generateParseTree
 from convertParseTreeToNaturalLanguage import generateSentence
 
+# Program description
+# This script generates pre-training data for each proof task by computing similarity scores for associated symbols.
+# Similarity scores are calculated as follows:
+# - For each positive symbol, compute the TF-IDF score. All the positive symbols from a proof process are treated as a document.
+# - For each negative symbol, count its occurrences within the proof process.
+# - For each neutral symbol, assign a score of zero.
+
 # Function to calculate term frequency
+# word: 'word' is the term (positive symbol) for which the TF-IDF value will be calculated.
+# document: 'document' refers to a list of terms (positive symbols) in a specific document.
 def termFrequency(word, document):
     occurence = 0
     for wordInDocument in document:
@@ -18,10 +27,14 @@ def termFrequency(word, document):
         return 0
 
 # Function to calculate the inverse document frequency
+# word: 'word' is the term (positive symbol) for which the TF-IDF value will be calculated.
+# documents: 'documents' refers to a collection of documents, each represented as a list of terms (positive symbols).
 def inverseDocumentFrequency(word, documents):
     return math.log10(len(documents)/documentFrequency(word, documents))
 
 # Function to calculate the document frequency
+# word: 'word' is the term (positive symbol) for which the TF-IDF value will be calculated.
+# documents: 'documents' refers to a collection of documents, each represented as a list of terms (positive symbols).
 def documentFrequency(word, documents):
     frequency = 0
     for document in documents:
@@ -29,11 +42,14 @@ def documentFrequency(word, documents):
             frequency = frequency + 1
     return frequency
 
-# Function to calculate the TF-IDF
+# Function to calculate the TF-IDF score
+# word: 'word' is the term (positive symbol) for which the TF-IDF value will be calculated.
+# document: 'document' refers to a list of terms (positive symbols) in a specific document.
+# documents: 'documents' refers to a collection of documents, each represented as a list of terms (positive symbols).
 def tfIdf(word, document, documents):
     return termFrequency(word, document) * inverseDocumentFrequency(word, documents) 
 
-# Function to count word occurrences in a document
+# Function to count word (negative symbol) occurrences in a document (list of negative symbols)
 def countWordOccurencesInDocument(document):
     return {item: document.count(item) for item in document}
 
@@ -54,7 +70,7 @@ def getMinMax(occurences):
     
     return {'min':min, 'max':max}
 
-# Function to normalize data
+# Normalize 'data' from range [domainMin, domainMax] to [rangeMin, rangeMax].
 def normalizeData(data, domainMin, domainMax, rangeMin, rangeMax):
         if(domainMax - domainMin == 0):
             return rangeMin
@@ -73,6 +89,7 @@ if not os.path.exists('./preTrainingDataCollectionLog'):
 with open('./as_cn_mapping_test.json', 'r') as file:
     wordMapping = json.load(file)
 
+# Loading the 'documents' for calculating the TF-IDF score
 with open(os.path.join('./documents.json')) as file:
     documents = json.load(file)['documents']
 
@@ -161,6 +178,7 @@ with open('./preTrainingDataCollectionLog/logFile', 'r+') as logFile:
                     minMax = getMinMax(occurences)
             
                 # for every symbol normalize the occurence based on min-max normalization and save it in scores and negative symbol scores
+                # Notice: By setting the minimum range to 0 and the maximum range to -1, the slope of the line will be reversed. Since the slope is now (-1 - 0) = -1, the slope is -1/(domain max - domain min).
                 for element in occurences:
                     scores[element] = {
                         'score': occurences[element],

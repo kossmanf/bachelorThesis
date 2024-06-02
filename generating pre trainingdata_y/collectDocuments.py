@@ -1,6 +1,15 @@
+# Importing necessary modules
 import os  
 import json  
 from tqdm import tqdm 
+
+# Program description
+# This program iterates over the positive symbols of every generated 'document'.
+# From each document the positive symbols are extracted in a list 
+# A new list is generated which contains the lists with the positive symbols.
+# This is done for the following reason: for the positive symbols the tfidf score is calculated later on.
+# Every list of positive symbols can be seen as a document; therefore, the negative and neutral symbols are not necessary anymore for calculating the tfidf.
+# These 'documents' used for calculating the tfidf scores are then saved in a JSON file named documents.
 
 # Setting the directory where the JSON files are located
 rootdir = './extractedSymbols'
