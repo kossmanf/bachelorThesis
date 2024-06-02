@@ -1,9 +1,19 @@
+# Importing necessary modules
 import json
 import numpy as np
 import random
 from tqdm import tqdm
 
+# Program description
+# This program uses bootstrapping to estimate statistical measures from evaluation files generated for each training epoch.
+# Measures include Mean Absolute Error (MAE), Mean Error (ME), and the standard deviation of the absolute errors.
+# This information is used for analyzing the training progress across epochs.
+
+
 # This function performs bootstrapping on given data to generate statistical estimates.
+# data: The original dataset for generating bootstrap samples.
+# num_samples: The number of bootstrap samples to generate.
+# func: The function to compute a statistic on each sample.
 def bootstrapping(data, num_samples, func):
     bootstrapedValues = []
     n = len(data)  # The size of the dataset
@@ -21,7 +31,7 @@ def bootstrapping(data, num_samples, func):
     
     return bootstrapedValues
 
-# Lists to store aggregated bootstrapped values for positive and negative residuals
+# Lists to store the aggregated bootstrapped values
 meanErrors = []
 meanAbsoluteErrors = []
 standardDevAbsoluteErrors = []
@@ -31,13 +41,13 @@ me =  lambda data: np.mean(data)  # Mean of the data
 mae =  lambda data: np.mean(np.abs(data))  # Mean absolute error
 aeStd = lambda data: np.std(np.abs(data), ddof=1)  # Standard deviation of the absolute errors
 
-    # Load evaluation data from a JSON file corresponding to the 0 epoch
+# Load evaluation data from a JSON file corresponding to the epoch
 with open(f'evaluation_epoch_{0}.json', 'r') as file:
     # Load evaluation data from a JSON file corresponding to the current epoch
     json_data = json.load(file)
     untrainedResiduals = json_data['untrainedResiduals']
 
-# Calculate and store bootstrapped statistics for positive residuals
+# Calculate and store bootstrapped statistics for the untrained model for comparison and append it to the corresponding lists
 me_val = bootstrapping(untrainedResiduals, 50, me)
 meanErrors.append(np.mean(me_val))
 mae_val = bootstrapping(untrainedResiduals, 50, mae)
@@ -45,15 +55,17 @@ meanAbsoluteErrors.append(np.mean(mae_val))
 aeStd_val = bootstrapping(untrainedResiduals, 50, aeStd)
 standardDevAbsoluteErrors.append(np.mean(aeStd_val))
 
+# Specify the number of training epochs for calculating the bootstrapped statistics
+numEpochs = 3
 
 # Process multiple evaluation files, one for each epoch, with progress displayed
-for epoch in tqdm(range(0, 5), desc="Processing evaluation files"):
+for epoch in tqdm(range(0, numEpochs), desc="Processing evaluation files"):
     # Load evaluation data from a JSON file corresponding to the current epoch
     with open(f'evaluation_epoch_{epoch}.json', 'r') as file:
         json_data = json.load(file)
         trainedResiduals = json_data['trainedResiduals']
 
-    # Calculate and store bootstrapped statistics for positive residuals
+    # Calculate and store bootstrapped statistics
     me_val = bootstrapping(trainedResiduals, 50, me)
     meanErrors.append(np.mean(me_val))
     mae_val = bootstrapping(trainedResiduals, 50, mae)

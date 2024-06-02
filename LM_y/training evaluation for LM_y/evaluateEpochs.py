@@ -1,3 +1,4 @@
+# Importing necessary modules
 import json
 import torch
 import math
@@ -9,6 +10,11 @@ import matplotlib.pyplot as plt
 import random
 from tqdm import tqdm
 import torch
+
+# Program description
+# This program processes different backed-up epoch files by extracting the state disc to evaluate the trained model at each epoch from the testing data.
+# It assesses the performance of both the trained and untrained models using test data. 
+# For each epoch, the program generates an evaluation file containing the calculated residuals (predicted score - actual score), along with the actual and predicted scores for the trained and untrained model.
 
 # device and tokenizer 
 device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
@@ -26,12 +32,19 @@ print(f"model moved to {device}")
 # Set the model into evaluation mode
 original_model.eval()
 
-#Mean Pooling - Take attention mask into account for correct averaging
+# Mean Pooling - Take attention mask into account for correct averaging
+# model_output: Tensor containing token embeddings from a language model.
+# attention_mask: Tensor that specifies which tokens should be considered and which are padding.
 def mean_pooling(model_output, attention_mask):
     token_embeddings = model_output[0] #First element of model_output contains all token embeddings
     input_mask_expanded = attention_mask.unsqueeze(-1).expand(token_embeddings.size()).float()
     return torch.sum(token_embeddings * input_mask_expanded, 1) / torch.clamp(input_mask_expanded.sum(1), min=1e-9)
 
+# Function to generate sentence embeddings using a model and tokenizer.
+# model: language model used to compute embeddings.
+# tokenizer: Tokenizer corresponding to the model to process and encode sentences.
+# sentences: List of textual sentences to be converted into embeddings.
+# Tokenize sentences
 def getEmbeddings(model, tokenizer, sentences):
     # Tokenize sentences
     encoded_input = tokenizer(sentences, padding=True, truncation=True, return_tensors='pt')
@@ -46,6 +59,11 @@ def getEmbeddings(model, tokenizer, sentences):
 
     return sentence_embeddings
 
+# Function to calculate the predicted score based with the cosine similarity based on the embeddings.
+# model: language model used to compute embeddings.
+# tokenizer: Tokenizer corresponding to the model to process and encode sentences.
+# sentences: List of textual sentences to be converted into embeddings.
+# Tokenize sentences
 def calculatePredictedScore(verbalizedGoal, symbol, tokenizer, model):
     # calculate the goal and the symbol embedding 
     goalEmbedding = getEmbeddings(model, tokenizer, [verbalizedGoal])
@@ -86,9 +104,10 @@ for epoch in tqdm(range(0, 5)):
     # load model into memory
     trained_model.to(device)
 
+    # setting the trained model into eval mode
     trained_model.eval()
 
-    # Lists for saving the residuals for highest and lowest scores
+    # lists for the the actual values, the predicted scores and the residuals
     trainedResiduals = []
     untrainedResiduals = []
     predictedScores_trained = []

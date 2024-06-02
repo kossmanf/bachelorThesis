@@ -1,3 +1,4 @@
+# Importing necessary modules
 import torch
 import json
 import os
@@ -11,11 +12,10 @@ from transformers import AutoModel, AutoTokenizer
 from torch.nn import CosineSimilarity
 import numpy as np
 from tqdm import tqdm  
-import random
 
 # Program description
-# This Program trains the model with a loss functions using a set of random samples of the testing data.
-# This is done to evaluate the trained model's performance using the specified loss function.
+# This Program trains the model with a loss functions using the testing data.
+# This is done to train the model.
 
 # function to load dataset
 class CustomDataset(Dataset):
@@ -28,20 +28,6 @@ class CustomDataset(Dataset):
         self.symbolNames = data['symbolNames']
         self.normalizedScores = data['normalizedScores']
         self.length = len(self.verbalizedGoals)
-        
-        # Set the target number of data points to randomly select
-        amount = 5000
-
-        # Generate a list of `amount` unique random indices from the dataset's range
-        indices = [random.randint(0, self.length - 1) for _ in range(0, amount)]
-
-        # Update verbalizedGoals, symbolNames, and normalizedScores with data at selected indices
-        self.verbalizedGoals = [self.verbalizedGoals[i] for i in indices]
-        self.symbolNames = [self.symbolNames[i] for i in indices]
-        self.normalizedScores = [self.normalizedScores[i] for i in indices]
-
-        # update the length
-        self.length = amount
 
     # returning the feature and label at a specific index
     def __getitem__(self, index):
@@ -79,8 +65,6 @@ def mean_pooling(model_output, attention_mask):
 # device: The computation device (CPU or GPU) where the model computations are performed.
 # epochs: The total number of times the entire dataset is passed through the model.
 # start_epoch: (optional, default=0) The epoch index at which training begins, useful for resuming training.
-# start_loss: (optional, default=0.0) Initial loss from which the epoch loss accumulation begins, useful when resuming training.
-
 def train_model(model, optimizer, dataloader, criterion, device, epochs, start_epoch=0):
 
     # set the model into training mode
@@ -134,7 +118,8 @@ def train_model(model, optimizer, dataloader, criterion, device, epochs, start_e
             'epoch': epoch,
             'model_state_dict': model.state_dict(),
             'optimizer_state_dict': optimizer.state_dict(),
-            'loss': total_loss
+            'loss': total_loss,
+            'lossPoints': lossPoints
         }, save_file_name)
 
 if __name__ == "__main__":
@@ -142,7 +127,7 @@ if __name__ == "__main__":
     # training parameters
     data_file = './trainingData.pt'
     batch_size = 8
-    epochs = 3
+    epochs = 5
 
     # device and tokenizer 
     device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
@@ -169,10 +154,8 @@ if __name__ == "__main__":
     # Check if there's a backed-up model and load it
     # checkpoint_file = 'checkpoint.pt'
     start_epoch = 0
-    start_loss = 0.0
-    lossPoints = []
 
-    # # check if a checkpoint exists
+    # check if a checkpoint exists
     # if os.path.exists(checkpoint_file):
     #     checkpoint = torch.load(checkpoint_file)
     #     model.load_state_dict(checkpoint['model_state_dict'])
@@ -184,7 +167,3 @@ if __name__ == "__main__":
 
     # Saving the final model
     torch.save(model.state_dict(), 'final_model.pt')
-
-    # Saving the final loss function 
-    with open('lossFunctionPoints.json', 'w') as file:
-        json.dump({'lossPoints': lossPoints}, file, indent=4)

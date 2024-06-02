@@ -1,17 +1,22 @@
+# Importing necessary modules
 import torch
 import json
 import os
 import math
 from torch.utils.data import Dataset, DataLoader
 from torch.nn.functional import cosine_similarity, normalize
+from torch.nn import MSELoss
 from torch.nn import HuberLoss
-from torch.nn import CosineEmbeddingLoss
 import torch.optim as optim
 from transformers import AutoModel, AutoTokenizer
 from torch.nn import CosineSimilarity
 import numpy as np
 from tqdm import tqdm  
 import random
+
+# Program description
+# This Program trains the model with a loss functions using a set of random samples of the testing data.
+# This is done to evaluate the trained model's performance using the specified loss function.
 
 # function to load dataset
 class CustomDataset(Dataset):
@@ -24,7 +29,7 @@ class CustomDataset(Dataset):
         self.symbolNames = data['symbolNames']
         self.normalizedScores = data['normalizedScores']
         self.length = len(self.verbalizedGoals)
-
+        
         # Set the target number of data points to randomly select
         amount = 5000
 
@@ -67,15 +72,22 @@ def mean_pooling(model_output, attention_mask):
     input_mask_expanded = attention_mask.unsqueeze(-1).expand(token_embeddings.size()).float()
     return torch.sum(token_embeddings * input_mask_expanded, 1) / torch.clamp(input_mask_expanded.sum(1), min=1e-9)
 
-# Inside the train_model() function
-def train_model(model, optimizer, dataloader, criterion, device, epochs, start_epoch=0, start_loss=0.0, lossPoints=[]):
+# function for training the model
+# model: The neural network model that will be trained.
+# optimizer: The loss function used to update the model's weights.
+# dataloader: Provides batches of data, encapsulates dataset iteration.
+# criterion: The loss function used to calculate the discrepancy between predicted and actual outputs.
+# device: The computation device (CPU or GPU) where the model computations are performed.
+# epochs: The total number of times the entire dataset is passed through the model.
+# start_epoch: (optional, default=0) The epoch index at which training begins, useful for resuming training.
+
+def train_model(model, optimizer, dataloader, criterion, device, epochs, start_epoch=0):
 
     # set the model into training mode
     model.train()
 
     # training loop
     for epoch in range(start_epoch, epochs):
-        total_loss = start_loss
 
         for ctr, batch in enumerate(tqdm(dataloader, desc=f"Epoch {epoch+1}/{epochs}", leave=False)):
             # extracting the goals, symbols and labels
@@ -116,20 +128,14 @@ def train_model(model, optimizer, dataloader, criterion, device, epochs, start_e
             # optimize the weights
             optimizer.step()
 
-            # add the loss to the total loss
-            total_loss += loss.item()
-
+        # Save the state of the training and the state of the language model after each trained epoch to evaluate the performance after each epoch and as a checkpoint for recovery.
         save_file_name = f"checkpoint_epoch_{epoch}.pt"
         torch.save({
             'epoch': epoch,
             'model_state_dict': model.state_dict(),
             'optimizer_state_dict': optimizer.state_dict(),
-            'loss': total_loss,
-            'lossPoints': lossPoints
+            'loss': total_loss
         }, save_file_name)
-        
-        # append the total loss to the total loss function
-        lossPoints.append(total_loss)
 
 if __name__ == "__main__":
 
@@ -142,6 +148,7 @@ if __name__ == "__main__":
     device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
     tokenizer = AutoTokenizer.from_pretrained('sentence-transformers/all-MiniLM-L6-v2')
 
+    # initializing the data loader
     dataloader = create_dataloader(data_file, batch_size)
 
     # creating the model and the optimizer
@@ -156,31 +163,23 @@ if __name__ == "__main__":
             if isinstance(v, torch.Tensor):
                 state[k] = v.to(device)
 
-    # specifying the criterion
-    criterion = HuberLoss(reduction='mean', delta=0.3)
+    # specifying diffrent criterions for testing
+    #criterion = HuberLoss(reduction='mean', delta=0.3)
+    criterion = MSELoss()
 
     # Check if there's a backed-up model and load it
-    checkpoint_file = 'checkpoint_epoch_0.pt'
+    # checkpoint_file = 'checkpoint.pt'
     start_epoch = 0
-    start_loss = 0.0
-    lossPoints = []
 
-    # check if a checkpoint exists
-    '''
-    if os.path.exists(checkpoint_file):
-        checkpoint = torch.load(checkpoint_file)
-        model.load_state_dict(checkpoint['model_state_dict'])
-        optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
-        start_epoch = checkpoint['epoch']
-        lossPoints = checkpoint['lossPoints']
-    '''
+    # # check if a checkpoint exists
+    # if os.path.exists(checkpoint_file):
+    #     checkpoint = torch.load(checkpoint_file)
+    #     model.load_state_dict(checkpoint['model_state_dict'])
+    #     optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+    #     start_epoch = checkpoint['epoch']
 
     # training the model
-    train_model(model, optimizer, dataloader, criterion, device, epochs, start_epoch, start_loss, lossPoints)
+    train_model(model, optimizer, dataloader, criterion, device, epochs, start_epoch)
 
     # Saving the final model
     torch.save(model.state_dict(), 'final_model.pt')
-
-    # Saving the final loss function 
-    with open('lossFunctionPoints.json', 'w') as file:
-        json.dump({'lossPoints': lossPoints}, file, indent=4)
