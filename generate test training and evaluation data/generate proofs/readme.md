@@ -25,6 +25,9 @@ Execute the script in a command line interface:
 python generateProofs.py
 ```
 
+### Required directories
+- `./axioms`: Folder which contains the axiom files which contain the adimen sumo axioms and a conjecture sorted by category.
+
 ## Output
 The script will output proof results into a structured directory under `./proofs` based on the category of each axiom. Each proof attempt is logged in the `proofLog.txt` file.
 

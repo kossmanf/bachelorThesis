@@ -5,8 +5,6 @@ import matplotlib.pyplot as plt
 # Program description
 # This program takes the real scores from the training data and the calculated predicted scores from the lm of an epoch and plots them in a scatter plot with a bisecting line
 
-# Parameters
-
 # Determines the epoch to load the correct JSON file containing the evaluation data for that epoch
 epoch = 1
 

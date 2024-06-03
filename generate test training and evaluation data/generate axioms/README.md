@@ -2,24 +2,19 @@
 # Axiom File Generator
 
 ## Description
-This Python script automates the preparation of axiom files for use with the Eprover theorem solver. It primarily handles axiom files from Adimen-SUMO, organizing them with specified training goals into a coherent structure that can be processed efficiently.
-
-## Features
-- Deletes existing axiom directories and their contents to ensure a fresh start.
-- Automatically combines Adimen-SUMO axioms with specified goals.
-- Organizes combined files into a structure suited for theorem solving with Eprover.
-
-## Installation
-Clone the repository to your local machine:
-```bash
-git clone [URL-to-your-repository]
-cd [repository-name]
-```
+This Python script automates the preparation of axiom files for use with the Eprover theorem solver. Each axiom folder contains the axioms from Adimen-SUMO and a conjecture to be proven.
 
 ## Requirements
 - Python 3.x
 - shutil (standard library)
 - os (standard library)
+
+### Required Files and Directories
+- `./categorized goals`: Folder which contains the goals in seperated folders sorted by category.
+- `adimen.sumo.tstp`: File which contains the axioms from Adimen-SUMO.
+
+### Output
+- `./axioms`: Folder which contains the axiom files which contain the adimen sumo axioms and a conjecture sorted by category.
 
 ## Usage
 To run the script, navigate to the script's directory and execute:
