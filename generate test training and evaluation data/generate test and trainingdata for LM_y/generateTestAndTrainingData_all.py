@@ -1,3 +1,4 @@
+# Importing necessary modules
 from torch.utils.data import Dataset, DataLoader
 import torch
 import os
@@ -6,7 +7,12 @@ import random
 import math
 from tqdm import tqdm
 
-# Define the directory containing pre-training data
+# program description
+# This program splits the pre training data into test and training sets, each data point is a triplet of goal, score, and symbol.
+# All data points are used for training and testing.
+# The triplet data is organized into three lists: goals, scores, and symbols. Each element at a given index across these lists forms one complete data point.
+
+# path for the pre training data
 rootdir = './preTrainingDataCollection'
 
 # Initialize lists to store training and test data
@@ -18,16 +24,13 @@ verbalizedGoals_test = []
 symbolNames_test = []
 normalizedScores_test = []
 
-# Get list of files in the directory
+# load the pre training data
 preTrainingData = os.listdir(rootdir)
 
+# This function generates training and test datasets from pre-training data.
+# percentage : The percentage of data to use for training.
+# preTrainingData : List of data filenames to be processed.
 def genTestAndTrainingData(percentage, preTrainingData):
-    """
-    Generates training and test datasets from pre-training data.
-    Parameters:
-        percentage (float): The percentage of data to use for training.
-        preTrainingData (list): List of data filenames to be processed.
-    """
 
     # Calculate the number of files to be used for training
     training_amount = (percentage / 100) * len(preTrainingData)
@@ -74,8 +77,6 @@ def genTestAndTrainingData(percentage, preTrainingData):
                 'normalizedScore': scores['normalizedScore']
             })
         
-
-
         # Sort symbols by their normalized scores, highest first
         posTd_tmp.sort(key=lambda x: x['normalizedScore'], reverse=True)
         negTd_tmp.sort(key=lambda x: x['normalizedScore'], reverse=True)
@@ -104,6 +105,7 @@ def genTestAndTrainingData(percentage, preTrainingData):
     training_data = {'verbalizedGoals': verbalizedGoals_training, 'symbolNames': symbolNames_training, 'normalizedScores': normalizedScores_training}
     test_data = {'verbalizedGoals': verbalizedGoals_test, 'symbolNames': symbolNames_test, 'normalizedScores': normalizedScores_test}
 
+    # save the test and training data
     with open("trainingData.json", "w") as json_file:
         json.dump(training_data, json_file)
     with open("testData.json", "w") as json_file:
@@ -112,4 +114,5 @@ def genTestAndTrainingData(percentage, preTrainingData):
     torch.save(training_data, 'trainingData.pt')
     torch.save(test_data, 'testData.pt')
 
+# generate the test and training data
 genTestAndTrainingData(80, preTrainingData)  

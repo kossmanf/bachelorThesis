@@ -2,6 +2,7 @@
 import json
 import os
 
+# Program description
 # This program deletes output files generated from similar proof tasks to remove duplicates.
 # It also removes output files from proof tasks that were used in the training of the language model.
 

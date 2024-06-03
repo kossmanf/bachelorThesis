@@ -1,3 +1,4 @@
+# Importing necessary modules
 from torch.utils.data import Dataset, DataLoader
 import torch
 import os
@@ -6,57 +7,57 @@ import random
 import math
 from tqdm import tqdm
 
-# Set the directory containing pre-training data
+# program description
+# This program splits the pre training data into test and training sets, each data point is a triplet of goal, score, and symbol.
+# The data points are selected randomly, based on the specified ratio of neutral and negative symbols to positive symbols.
+# The triplet data is organized into three lists: goals, scores, and symbols. Each element at a given index across these lists forms one complete data point.
+
+# path for the pre training data
 rootdir = './preTrainingDataCollection'
 
-# Retrieve a list of file names from the specified directory
+# Initialize lists to store training and test data
+verbalizedGoals_training = []
+symbolNames_training = []
+normalizedScores_training = []
+
+verbalizedGoals_test = []
+symbolNames_test = []
+normalizedScores_test = []
+
+# load the pre training data
 preTrainingData = os.listdir(rootdir)
 
-def genTestAndTrainingData(percentage, preTrainingData, posSymbolAmount, negSymbolAmount, neutSymbolAmount):
-    """
-    This function generates training and test datasets from the provided list of pre-training data files.
-    
-    Args:
-        percentage (float): Percentage of data to use for training.
-        preTrainingData (list): List of filenames containing the data.
-        posSymbolAmount (int): Number of positive symbol instances to select randomly.
-        negSymbolAmount (int): Number of negative symbol instances to select randomly.
-        neutSymbolAmount (int): Number of neutral symbol instances to select randomly.
-    """
+# Generates training and test datasets from pre-training data.
+# percentage : The percentage of data to use for training.
+# preTrainingData : List of data filenames to be processed.
+# k : Ratio of negative and neutral to positive samples.
+def genTestAndTrainingData(percentage, preTrainingData, k):
 
-    # Initialize empty lists to store elements for the training and test datasets
-    verbalizedGoals_training = []
-    symbolNames_training = []
-    normalizedScores_training = []
-
-    verbalizedGoals_test = []
-    symbolNames_test = []
-    normalizedScores_test = []
-
-    # Calculate the number of files to allocate to the training dataset
+    # Calculate the number of files to be used for training
     training_amount = (percentage / 100) * len(preTrainingData)
     
-    # Initialize a counter to track the number of files processed
+    # Counter to track the number of processed files for splitting into training/test
     ctr = 0
 
-    # Process each file in the list
+    # Process each file
     for fileName in tqdm(preTrainingData, desc="Processing data"):
-        # Open and load JSON data from each file
+        # Load JSON data from the file
         with open(f'{rootdir}/{fileName}') as json_data:
             data = json.load(json_data)
         
-        # Extract relevant data from the loaded JSON object
+        # Extract the verbalized goal and positive/negative scores
         verbalizedGoal = data['verbalizedGoal']
         posScores = data['posSymbolScores']
         negScores = data['negSymbolScores']
         neutScores = data['neutralSymbolScores']
 
-        # Temporary storage for training data from positive, negative, and neutral symbols
+
+        # Create temporary lists for positive and negative training data
         posTd_tmp = []
         negTd_tmp = []
         neutTd_tmp = []
 
-        # Append data to the temporary lists
+        # Collect training data for each symbol with scores
         for symbolName, scores in posScores.items():
             posTd_tmp.append({
                 'verbalizedGoal': verbalizedGoal,
@@ -70,37 +71,40 @@ def genTestAndTrainingData(percentage, preTrainingData, posSymbolAmount, negSymb
                 'symbolName': symbolName,
                 'normalizedScore': scores['normalizedScore']
             })
+   
         
+        # appending the neutral symbols to the negative symbols to select n * k symbols from the negative and neutral symbols 
         for symbolName, scores in neutScores.items():
-            neutTd_tmp.append({
+            negTd_tmp.append({
                 'verbalizedGoal': verbalizedGoal,
                 'symbolName': symbolName,
                 'normalizedScore': scores['normalizedScore']
             })
 
-        # Randomly select specified amount of positive, negative, and neutral symbols
-        if posSymbolAmount <= len(posTd_tmp):
-            posTd_tmp = random.sample(posTd_tmp, posSymbolAmount)
-        if negSymbolAmount <= len(negTd_tmp):
-            negTd_tmp = random.sample(negTd_tmp, negSymbolAmount)
-        if neutSymbolAmount <= len(neutTd_tmp):
-            neutTd_tmp = random.sample(neutTd_tmp, neutSymbolAmount)
-
-        # Combine the samples to form the full set of training data for the current file
-        trainingData = posTd_tmp + negTd_tmp + neutTd_tmp
+        # Adjust the amount of negative and neutral samples based on the ratio k
+        n = len(posTd_tmp)
         
-        # Distribute the combined data into training or test datasets
+        # calculate the amount of negative and neutral symbols based on the ratio
+        negNeutSymbAmount = int(n * k)
+        
+        # select randomly the number of symbols based on the ratio
+        negTd_tmp = random.sample(negTd_tmp, negNeutSymbAmount) if negNeutSymbAmount < len(negTd_tmp) else negTd_tmp
+
+
+        # Combine positive and negative data
+        trainingData = posTd_tmp + neutTd_tmp + negTd_tmp
+        
+        # Assign data to training or test sets based on the training percentage
         for td in trainingData:
             if ctr < training_amount:
                 verbalizedGoals_training.append(td['verbalizedGoal'])
                 symbolNames_training.append(td['symbolName'])
-                normalizedScores_training.append(td['normalizedScore'])
+                normalizedScores_training.append(td["normalizedScore"])
             else:
                 verbalizedGoals_test.append(td['verbalizedGoal'])
                 symbolNames_test.append(td['symbolName'])
-                normalizedScores_test.append(td['normalizedScore'])
+                normalizedScores_test.append(td["normalizedScore"])
                 
-        # Increment the counter after processing each file
         ctr += 1
 
     # Print summary statistics of the training and test data
@@ -111,6 +115,7 @@ def genTestAndTrainingData(percentage, preTrainingData, posSymbolAmount, negSymb
     training_data = {'verbalizedGoals': verbalizedGoals_training, 'symbolNames': symbolNames_training, 'normalizedScores': normalizedScores_training}
     test_data = {'verbalizedGoals': verbalizedGoals_test, 'symbolNames': symbolNames_test, 'normalizedScores': normalizedScores_test}
 
+    # save the test and training data
     with open("trainingData.json", "w") as json_file:
         json.dump(training_data, json_file)
     with open("testData.json", "w") as json_file:
@@ -119,5 +124,5 @@ def genTestAndTrainingData(percentage, preTrainingData, posSymbolAmount, negSymb
     torch.save(training_data, 'trainingData.pt')
     torch.save(test_data, 'testData.pt')
 
-genTestAndTrainingData(80, preTrainingData, 10, 15, 15)  
-
+# Example usage
+genTestAndTrainingData(80, preTrainingData, 2)  # Adjust the last parameter for different ratios of neg/pos

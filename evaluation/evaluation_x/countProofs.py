@@ -1,15 +1,21 @@
+# Importing necessary modules
 import os
 import re
 import json
 
-def countProofs(path):
+# Program description
+# This program counts the conjectures attempted to be proven and the completed proofs
 
+# This function counts the conjecutres and the completed proofs from the specified path
+def countConjecturesAndCompletedProofs(path):
+    # initialize the counters
     completedProofs = 0
-    allProofs = 0
+    conjectures = 0
 
+    # iteate over the categories and proof files
     for category in os.listdir(path):
         for proofFilePath in  os.listdir(os.path.join(path, category)):
-
+            # open the file path
             with open(os.path.join(path, category, proofFilePath), "r") as file:
                 # read the lines from the file
                 lines = file.read()
@@ -20,17 +26,21 @@ def countProofs(path):
 
                 # Find all matches with #Prooffound!
                 if len(re.findall('#Prooffound!', lines)) == 1:
+                    # increase the proof found counter
                     completedProofs = completedProofs + 1
-                                    
-                allProofs = allProofs + 1
 
+                # increase the conjectures counter
+                conjectures = conjectures + 1
 
+    # return the counter
     return {
-        'allProofs': allProofs, 
+        'conjectures': conjectures, 
         'completedProofs': completedProofs
     }
 
+# count the conjectures and the completed proof
+counts = countConjecturesAndCompletedProofs('./proofs')
 
-counts = countProofs('./proofs')
-print(counts['allProofs'])
+# print the numbers
+print(counts['conjectures'])
 print(counts['completedProofs'])
