@@ -63,6 +63,11 @@ Similarity scores are calculated as follows:
 ### Required Files and Directories
 -  `./preTrainingData`: Directory containing the pre training data in form documents containing the positive symbols, the negative symbols and the conjecture. 
 -  `./documents.json`: File containing the postive symbols of each document as a list in a list. 
+- `./as_cn_mapping_test.json`: File which maps the Adimen-SUMO Symbol onto natural language
+
+### Required imports from other programs`
+- `from tptpParser.parseTree import generateParseTree`
+- `from convertParseTreeToNaturalLanguage import generateSentence`
 
 ### Output
 - `./preTrainingDataCollection`: Directory containing a file for each conjecture which contains the conjecture the postive symbols with scores, the negative symbols with scores and the neutral sybols with scores. 
