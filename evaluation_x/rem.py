@@ -1,17 +1,26 @@
+# Importing necessary modules
 import json
 import os
 
+# This program deletes output files generated from similar proof tasks to remove duplicates.
+# It also removes output files from proof tasks that were used in the training of the language model.
+
+# file path from where the ouput files should should be deleted
 folderPath1 = 'proofs'
 folderPath2 = 'proofsNormal'
 
+# funtion to read the 
 def readJson(file_path):
     with open(file_path, 'r') as file:
         return json.load(file)
 
-def delete_files_with_conjectures(filesToRemove, folderPath):
+# this function deletes the specifies files from the path
+def deleteFiles(filesToRemove, folderPath):
     for file in filesToRemove:
+        # getting the tag from the path
         tag, filePath = file.split(':')
       
+        # checking if the tag co
         if tag == 'A':
             category, fileName = filePath.split('/')
             fileName = 'proof_' + fileName.split('_')[1]
@@ -33,8 +42,8 @@ duplicate_file_paths = [file for files in duplicates.values() for file in files[
 # Prepare list of files from common conjectures
 common_conjecture_file_paths = [file for files in common_conjectures.values() for file in files]
 
-
-delete_files_with_conjectures(duplicate_file_paths, folderPath1)
-delete_files_with_conjectures(common_conjecture_file_paths, folderPath1)
-delete_files_with_conjectures(duplicate_file_paths, folderPath2)
-delete_files_with_conjectures(common_conjecture_file_paths, folderPath2)
+# deleting the files 
+deleteFiles(duplicate_file_paths, folderPath1)
+deleteFiles(common_conjecture_file_paths, folderPath1)
+deleteFiles(duplicate_file_paths, folderPath2)
+deleteFiles(common_conjecture_file_paths, folderPath2)
