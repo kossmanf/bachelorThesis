@@ -1,8 +1,12 @@
+# Importing necessary modules
 from transformers import AutoModel, AutoTokenizer
 from torch.nn.functional import normalize 
 import torch
 import json
 from torch.nn import CosineSimilarity
+
+# Program description
+# This program generates embeddings for logical symbols from the Adimen-SUMO ontology and saves them in  a text file.
 
 # device and tokenizer 
 device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
@@ -27,6 +31,7 @@ trained_model.load_state_dict(state_dict)
 trained_model.to(device)
 print(f"model moved to {device}")
 
+# setting the trained model in eval mode
 trained_model.eval()
 
 #Mean Pooling - Take attention mask into account for correct averaging

@@ -1,8 +1,15 @@
+# Importing necessary modules
 import os
 import re
 from tqdm import tqdm
 import json
 
+# Program description
+# This program checks for duplicate proof tasks in the test data.
+# It also identifies proof tasks used in the test data and training data
+# It saves the filenames to JSON file.
+
+# Axiom files used for training and testing
 filePath1 = './testAxioms'
 filePath2 = './trainingAxioms'
 

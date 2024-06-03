@@ -1,54 +1,75 @@
+# Importing necessary modules
 import json
 import numpy as np
 import matplotlib.pyplot as plt 
+
+# Program description
+# This Program calculates the following statistical measures based on the extracted information about the number of processed clauses and whether a proof was found 
+# These statistics provide insights into the performance and efficiency of the eprover, comparing methods with and without the use of Language Models (LM).
+# `totalProofTasks`: Indicates the total number of proof tasks processed.
+# `solvedProofsWithoutLM` and `solvedProofsWithLM`: Show the count of tasks solved without and with the aid of language models, respectively.
+# Clause-related statistics:
+# `totalProcessedClausesWithoutLM` and `totalProcessedClausesWithLM`: Total clauses processed without and with language models.
+# `meanProcessedClausesWithoutLM` and `meanProcessedClausesWithLM`: Average number of clauses processed per task, without and with language models.
+# `stdDevProcessedClausesWithoutLM` and `stdDevProcessedClausesWithLM`: Standard deviation of the number of processed clauses, providing a measure of variability.
+# `medianProcessedClausesWithoutLM` and `medianProcessedClausesWithLM`: Median number of clauses processed, indicating the central tendency.
+# Reduction proportions:
+# `percentageFewerClausesWithoutLM` and `percentageFewerClausesWithLM`: Percentages indicating the reduction in the number of clauses processed when comparing methods without and with language models.
+# `percentageSimilarClauses`: Indicates the percentage of tasks where the number of clauses processed were similar between methods.
+# Overall reduction statistics:
+# `averagePercentageReduction`: The average percentage reduction in clause processing across tasks.
+# `averagePercentageReductionStd`: Standard deviation of the percentage reductions, indicating variability in efficiency gains.
+# `medianPercentageReduction`: Median of percentage reductions, providing another measure of central tendency for efficiency gains.
+# The reduction percentage and the number of processed clauses are visualized in graphs
+# The statistics are then saved into a file.
 
 # Reading JSON data from a file
 with open('extractedInformation.json', 'r') as file:
     data = json.load(file)
 
 # Function to gather the number of processed clauses with and without Learning Modules (LM)
-def get_number_of_processed_clauses(data):
-    clauses_without_lm, clauses_with_lm = [], []
-    for normal_proof in data['proofsNormal']:
-        if normal_proof['proofFound'] == 't' and normal_proof['Processed clauses']:
-            for lm_proof in data['proofs']:
-                if normal_proof['proofName'] == lm_proof['proofName'] and lm_proof['Processed clauses']:
-                    clauses_without_lm.append(int(normal_proof['Processed clauses']))
-                    clauses_with_lm.append(int(lm_proof['Processed clauses']))
+def getNumberOfProcessedClauses(data):
+    clausesWithoutLm, clausesWithLm = [], []
+    for normalProof in data['proofsNormal']:
+        if normalProof['proofFound'] == 't' and normalProof['Processed clauses']:
+            for lmProof in data['proofs']:
+                if normalProof['proofName'] == lmProof['proofName'] and lmProof['Processed clauses']:
+                    clausesWithoutLm.append(int(normalProof['Processed clauses']))
+                    clausesWithLm.append(int(lmProof['Processed clauses']))
     return {
-        'numProcessedClausesWithoutLM': clauses_without_lm,
-        'numProcessedClausesWithLM': clauses_with_lm
+        'numProcessedClausesWithoutLm': clausesWithoutLm,
+        'numProcessedClausesWithLm': clausesWithLm
     }
 
 # Function to count the total number of proofs and how many were completed
-def get_number_of_solved_proofs(data):
-    num_proofs_normal = len([proof for proof in data['proofsNormal'] if proof['proofFound'] == 't'])
-    num_proofs_with_lm = len([proof for proof in data['proofs'] if proof['proofFound'] == 't'])
+def getNumberOfSolvedProofs(data):
+    numProofsNormal = len([proof for proof in data['proofsNormal'] if proof['proofFound'] == 't'])
+    numProofsWithLm = len([proof for proof in data['proofs'] if proof['proofFound'] == 't'])
     return {
         'totalProofTasks': len(data['proofsNormal']),
-        'solvedProofsWithoutLM': num_proofs_normal,
-        'solvedProofsWithLM': num_proofs_with_lm
+        'solvedProofsWithoutLm': numProofsNormal,
+        'solvedProofsWithLm': numProofsWithLm
     }
 
 # Function to calculate statistics about the number of processed clauses with and without LM
-def calculate_clause_statistics(data):
-    processed_clauses = get_number_of_processed_clauses(data)
-    clauses_without_lm = processed_clauses['numProcessedClausesWithoutLM']
-    clauses_with_lm = processed_clauses['numProcessedClausesWithLM']
+def calculateClauseStatistics(data):
+    processedClauses = getNumberOfProcessedClauses(data)
+    clausesWithoutLm = processedClauses['numProcessedClausesWithoutLm']
+    clausesWithLm = processedClauses['numProcessedClausesWithLm']
 
     # Set up a figure with two subplots (1 row, 2 columns)
     plt.figure(figsize=(12, 6))  # Adjust the size as needed
 
     # Subplot 1: Clauses without language model
     plt.subplot(1, 2, 1)  # (rows, columns, subplot number)
-    plt.bar(range(len(clauses_without_lm)), clauses_without_lm, color='gray')
+    plt.bar(range(len(clausesWithoutLm)), clausesWithoutLm, color='gray')
     plt.title('Clauses Processed Without LM')
     plt.xlabel('Proof process')
     plt.ylabel('Number of Clauses')
 
     # Subplot 2: Clauses with language model
     plt.subplot(1, 2, 2)
-    plt.bar(range(len(clauses_with_lm)), clauses_with_lm, color='gray')
+    plt.bar(range(len(clausesWithLm)), clausesWithLm, color='gray')
     plt.title('Clauses Processed With LM')
     plt.xlabel('Proof process')
     plt.ylabel('Number of Clauses')
@@ -58,44 +79,44 @@ def calculate_clause_statistics(data):
     plt.show()
 
     return {
-        'clauseStatisticsWithoutLM':{
-            'totalProcessedClausesWithoutLM': sum(clauses_without_lm),      
-            'meanProcessedClausesWithoutLM': np.mean(clauses_without_lm),
-            'stdDevProcessedClausesWithoutLM': np.std(clauses_without_lm),
-            'medianProcessedClausesWithoutLM': np.median(clauses_without_lm),
+        'clauseStatisticsWithoutLm':{
+            'totalProcessedClausesWithoutLm': sum(clausesWithoutLm),      
+            'meanProcessedClausesWithoutLm': np.mean(clausesWithoutLm),
+            'stdDevProcessedClausesWithoutLm': np.std(clausesWithoutLm),
+            'medianProcessedClausesWithoutLm': np.median(clausesWithoutLm),
         },
-        'clauseStatisticsWithLM':{
-            'totalProcessedClausesWithLM': sum(clauses_with_lm),
-            'meanProcessedClausesWithLM': np.mean(clauses_with_lm),
-            'stdDevProcessedClausesWithLM': np.std(clauses_with_lm),
-            'medianProcessedClausesWithLM': np.median(clauses_with_lm)
+        'clauseStatisticsWithLm':{
+            'totalProcessedClausesWithLm': sum(clausesWithLm),
+            'meanProcessedClausesWithLm': np.mean(clausesWithLm),
+            'stdDevProcessedClausesWithLm': np.std(clausesWithLm),
+            'medianProcessedClausesWithLm': np.median(clausesWithLm)
         }
     }
 
 # Function to calculate percentage reductions between clauses processed with and without LM
-def calculate_clause_reduction_proportions(data):
-    fewer_clauses_without_lm, similar_clauses, fewer_clauses_with_lm = 0, 0, 0
-    for normal_proof in data['proofsNormal']:
-        if normal_proof['proofFound'] == 't' and normal_proof['Processed clauses']:
-            for lm_proof in data['proofs']:
-                if normal_proof['proofName'] == lm_proof['proofName'] and lm_proof['Processed clauses']:
-                    normal_count = int(normal_proof['Processed clauses'])
-                    lm_count = int(lm_proof['Processed clauses'])
-                    if normal_count < lm_count:
-                        fewer_clauses_without_lm += 1
-                    elif normal_count == lm_count:
-                        similar_clauses += 1
+def calculateClauseReductionProportions(data):
+    fewerClausesWithoutLm, similarClauses, fewerClausesWithLm = 0, 0, 0
+    for normalProof in data['proofsNormal']:
+        if normalProof['proofFound'] == 't' and normalProof['Processed clauses']:
+            for lmProof in data['proofs']:
+                if normalProof['proofName'] == lmProof['proofName'] and lmProof['Processed clauses']:
+                    normalCount = int(normalProof['Processed clauses'])
+                    lmCount = int(lmProof['Processed clauses'])
+                    if normalCount < lmCount:
+                        fewerClausesWithoutLm += 1
+                    elif normalCount == lmCount:
+                        similarClauses += 1
                     else:
-                        fewer_clauses_with_lm += 1
+                        fewerClausesWithLm += 1
 
-    total_comparisons = fewer_clauses_without_lm + similar_clauses + fewer_clauses_with_lm
+    totalComparisons = fewerClausesWithoutLm + similarClauses + fewerClausesWithLm
     return {
-        'percentageFewerClausesWithoutLM': (fewer_clauses_without_lm / total_comparisons) * 100,
-        'percentageSimilarClauses': (similar_clauses / total_comparisons) * 100,
-        'percentageFewerClausesWithLM': (fewer_clauses_with_lm / total_comparisons) * 100
+        'percentageFewerClausesWithoutLm': (fewerClausesWithoutLm / totalComparisons) * 100,
+        'percentageSimilarClauses': (similarClauses / totalComparisons) * 100,
+        'percentageFewerClausesWithLm': (fewerClausesWithLm / totalComparisons) * 100
     }
 
-def calc_average_percentage_reduction(xData, yData):
+def calcAveragePercentageReduction(xData, yData):
     # Convert inputs to numpy arrays of type float to ensure numerical operations can be performed
     xData = np.array(xData, dtype=float)
     yData = np.array(yData, dtype=float)
@@ -103,26 +124,26 @@ def calc_average_percentage_reduction(xData, yData):
     if not np.all(xData):
         raise ValueError("xData contains zero elements, which will lead to division by zero.")
 
-    trimValue =70
+    trimValue = 70
 
     # Calculate percentage reductions using numpy vectorization
-    percentage_reductions = ((xData - yData) / xData) * 100
+    percentageReductions = ((xData - yData) / xData) * 100
 
-    sortedPercentageReduciton = np.sort(percentage_reductions)
-    trimedPercentageReduciton = [x for x in percentage_reductions if x not in sortedPercentageReduciton[:trimValue]]
+    sortedPercentageReduction = np.sort(percentageReductions)
+    trimmedPercentageReduction = [x for x in percentageReductions if x not in sortedPercentageReduction[:trimValue]]
 
     # Set up a figure with two subplots (1 row, 2 columns)
     plt.figure(figsize=(12, 6))  # Adjust the size as needed
 
     plt.subplot(1, 2, 1)  # (rows, columns, subplot number)
-    plt.scatter(range(len(percentage_reductions)), percentage_reductions, color='gray', s=5)
+    plt.scatter(range(len(percentageReductions)), percentageReductions, color='gray', s=5)
     plt.title('Clause reduction percentages')
     plt.xlabel('Proof process')
     plt.ylabel('Clause reduction percentage ')
 
     plt.subplot(1, 2, 2)
-    plt.scatter(range(len(trimedPercentageReduciton)), trimedPercentageReduciton, color='gray', s=5)
-    plt.title('Clause reduction percentages trimed')
+    plt.scatter(range(len(trimmedPercentageReduction)), trimmedPercentageReduction, color='gray', s=5)
+    plt.title('Clause reduction percentages trimmed')
     plt.xlabel('Proof process')
     plt.ylabel('Clause reduction percentage ')
 
@@ -130,53 +151,50 @@ def calc_average_percentage_reduction(xData, yData):
 
     # Compute the basic statistics
     return {
-        'averagePercentageReduction': np.mean(percentage_reductions),
-        'averagePercentageReductionStd': np.std(percentage_reductions),
-        'medianPercentageReduction': np.median(percentage_reductions)
+        'averagePercentageReduction': np.mean(percentageReductions),
+        'averagePercentageReductionStd': np.std(percentageReductions),
+        'medianPercentageReduction': np.median(percentageReductions)
     }
 
-
 # Collecting data and calculating reductions
-proof_statistics = get_number_of_solved_proofs(data)
-clause_statistics = calculate_clause_statistics(data)
-clause_reduction_proportions = calculate_clause_reduction_proportions(data)
-numberOfProcessedClauses = get_number_of_processed_clauses(data)
-average_percentage_reduction = calc_average_percentage_reduction(numberOfProcessedClauses['numProcessedClausesWithoutLM'], numberOfProcessedClauses['numProcessedClausesWithLM'])
-
+proofStatistics = getNumberOfSolvedProofs(data)
+clauseStatistics = calculateClauseStatistics(data)
+clauseReductionProportions = calculateClauseReductionProportions(data)
+numberOfProcessedClauses = getNumberOfProcessedClauses(data)
+averagePercentageReduction = calcAveragePercentageReduction(numberOfProcessedClauses['numProcessedClausesWithoutLm'], numberOfProcessedClauses['numProcessedClausesWithLm'])
 
 # Output summary information
-print(f"Total proof tasks: {proof_statistics['totalProofTasks']}")
-print(f"Tasks solved w/o LM: {proof_statistics['solvedProofsWithoutLM']}")
-print(f"Tasks solved w/ LM: {proof_statistics['solvedProofsWithLM']}")
+print(f"Total proof tasks: {proofStatistics['totalProofTasks']}")
+print(f"Tasks solved w/o LM: {proofStatistics['solvedProofsWithoutLm']}")
+print(f"Tasks solved w/ LM: {proofStatistics['solvedProofsWithLm']}")
 
-print(f"Total clauses w/o LM: {clause_statistics['clauseStatisticsWithoutLM']['totalProcessedClausesWithoutLM']}")
-print(f"Total clauses w/ LM: {clause_statistics['clauseStatisticsWithLM']['totalProcessedClausesWithLM']}")
+print(f"Total clauses w/o LM: {clauseStatistics['clauseStatisticsWithoutLm']['totalProcessedClausesWithoutLm']}")
+print(f"Total clauses w/ LM: {clauseStatistics['clauseStatisticsWithLm']['totalProcessedClausesWithLm']}")
 
-print(f"Mean clauses w/o LM: {clause_statistics['clauseStatisticsWithoutLM']['meanProcessedClausesWithoutLM']}")
-print(f"Mean clauses w/ LM: {clause_statistics['clauseStatisticsWithLM']['meanProcessedClausesWithLM']}")
+print(f"Mean clauses w/o LM: {clauseStatistics['clauseStatisticsWithoutLm']['meanProcessedClausesWithoutLm']}")
+print(f"Mean clauses w/ LM: {clauseStatistics['clauseStatisticsWithLm']['meanProcessedClausesWithLm']}")
 
-print(f"Std deviation of clauses w/o LM: {clause_statistics['clauseStatisticsWithoutLM']['stdDevProcessedClausesWithoutLM']}")
-print(f"Std deviation of clauses w/ LM: {clause_statistics['clauseStatisticsWithLM']['stdDevProcessedClausesWithLM']}")
+print(f"Std deviation of clauses w/o LM: {clauseStatistics['clauseStatisticsWithoutLm']['stdDevProcessedClausesWithoutLm']}")
+print(f"Std deviation of clauses w/ LM: {clauseStatistics['clauseStatisticsWithLm']['stdDevProcessedClausesWithLm']}")
 
-print(f"Median clauses w/o LM: {clause_statistics['clauseStatisticsWithoutLM']['medianProcessedClausesWithoutLM']}")
-print(f"Median clauses w/ LM : {clause_statistics['clauseStatisticsWithLM']['medianProcessedClausesWithLM']}")
+print(f"Median clauses w/o LM: {clauseStatistics['clauseStatisticsWithoutLm']['medianProcessedClausesWithoutLm']}")
+print(f"Median clauses w/ LM : {clauseStatistics['clauseStatisticsWithLm']['medianProcessedClausesWithLm']}")
 
-print(f"% fewer clauses w/o LM: {clause_reduction_proportions['percentageFewerClausesWithoutLM']}")
-print(f"% fewer clauses w/ LM: {clause_reduction_proportions['percentageFewerClausesWithLM']}")
-print(f"% similar clauses: {clause_reduction_proportions['percentageSimilarClauses']}")
+print(f"% fewer clauses w/o LM: {clauseReductionProportions['percentageFewerClausesWithoutLm']}")
+print(f"% fewer clauses w/ LM: {clauseReductionProportions['percentageFewerClausesWithLm']}")
+print(f"% similar clauses: {clauseReductionProportions['percentageSimilarClauses']}")
 
-print(f"Avg reduction of clauses: {average_percentage_reduction['averagePercentageReduction']}")
-print(f"Std deviation of reduction: {average_percentage_reduction['averagePercentageReductionStd']}")
-print(f"Median of reduction: {average_percentage_reduction['medianPercentageReduction']}")
+print(f"Avg reduction of clauses: {averagePercentageReduction['averagePercentageReduction']}")
+print(f"Std deviation of reduction: {averagePercentageReduction['averagePercentageReductionStd']}")
+print(f"Median of reduction: {averagePercentageReduction['medianPercentageReduction']}")
 
 # Save results to a JSON file
 results = {
-    "proofStatistics": proof_statistics,
-    "clauseStatisticsWithoutLM": clause_statistics['clauseStatisticsWithoutLM'],
-    "clauseStatisticsWithLM": clause_statistics['clauseStatisticsWithLM'],
-    "clauseReductionProportions": clause_reduction_proportions, 
-    "averagePercentageReduction": average_percentage_reduction
+    "proofStatistics": proofStatistics,
+    "clauseStatisticsWithoutLm": clauseStatistics['clauseStatisticsWithoutLm'],
+    "clauseStatisticsWithLm": clauseStatistics['clauseStatisticsWithLm'],
+    "clauseReductionProportions": clauseReductionProportions, 
+    "averagePercentageReduction": averagePercentageReduction
 }
 with open('statistics.json', 'w') as outfile:
     json.dump(results, outfile, indent=4)
-

@@ -1,69 +1,80 @@
+# Importing necessary modules
 import json
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt 
+
+# Program description
+# This Program calculates the following statistical measures based on the extracted information about the number of processed clauses and whether a proof was found 
+# These statistics provide insights into the performance and efficiency of the eprover, without the use of Language Models (LM).
+# `totalProofTasks`: Indicates the total number of proof tasks processed.
+# `solvedProofsWithoutLM` : Show the count of tasks solved without and with the aid of language models, respectively.
+# Clause-related statistics:
+# `totalProcessedClausesWithoutLM` : Total clauses processed without and with language models.
+# `meanProcessedClausesWithoutLM` : Average number of clauses processed per task, without and with language models.
+# `stdDevProcessedClausesWithoutLM` : Standard deviation of the number of processed clauses, providing a measure of variability.
+# `medianProcessedClausesWithoutLM` : Median number of clauses processed, indicating the central tendency.
+# The the number of processed clauses is visualized in a graph
+# The statistics are then saved into a file.
 
 # Reading JSON data from a file
 with open('extractedInformation.json', 'r') as file:
     data = json.load(file)
 
 # Function to gather the number of processed clauses with and without Learning Modules (LM)
-def get_number_of_processed_clauses(data):
-    clauses_without_lm, clauses_with_lm = [], []
-    for normal_proof in data['proofsNormal']:
-        if normal_proof['proofFound'] == 't' and normal_proof['Processed clauses']:
-                clauses_without_lm.append(int(normal_proof['Processed clauses']))
-                clauses_with_lm.append(int(0))
-
+def getNumberOfProcessedClauses(data):
+    clausesWithoutLM = []
+    for normalProof in data['proofsNormal']:
+        if normalProof['proofFound'] == 't' and normalProof['Processed clauses']:
+                clausesWithoutLM.append(int(normalProof['Processed clauses']))
     return {
-        'numProcessedClausesWithoutLM': clauses_without_lm,
+        'numProcessedClausesWithoutLM': clausesWithoutLM,
     }
 
 # Function to count the total number of proofs and how many were completed
-def get_number_of_solved_proofs(data):
-    num_proofs_normal = len([proof for proof in data['proofsNormal'] if proof['proofFound'] == 't'])
+def getNumberOfSolvedProofs(data):
+    numProofsNormal = len([proof for proof in data['proofsNormal'] if proof['proofFound'] == 't'])
 
     return {
         'totalProofTasks': len(data['proofsNormal']),
-        'solvedProofsWithoutLM': num_proofs_normal,
+        'solvedProofsWithoutLM': numProofsNormal,
     }
 
 # Function to calculate statistics about the number of processed clauses with and without LM
-def calculate_clause_statistics(data):
-    processed_clauses = get_number_of_processed_clauses(data)
-    clauses_without_lm = processed_clauses['numProcessedClausesWithoutLM']
+def calculateClauseStatistics(data):
+    processedClauses = getNumberOfProcessedClauses(data)
+    clausesWithoutLM = processedClauses['numProcessedClausesWithoutLM']
 
     return {
         'clauseStatisticsWithoutLM':{
-            'totalProcessedClausesWithoutLM': sum(clauses_without_lm),      
-            'meanProcessedClausesWithoutLM': np.mean(clauses_without_lm),
-            'stdDevProcessedClausesWithoutLM': np.std(clauses_without_lm),
-            'medianProcessedClausesWithoutLM': np.median(clauses_without_lm),
+            'totalProcessedClausesWithoutLM': sum(clausesWithoutLM),      
+            'meanProcessedClausesWithoutLM': np.mean(clausesWithoutLM),
+            'stdDevProcessedClausesWithoutLM': np.std(clausesWithoutLM),
+            'medianProcessedClausesWithoutLM': np.median(clausesWithoutLM),
         }
     }
 
 # Collecting data and calculating reductions
-proof_statistics = get_number_of_solved_proofs(data)
-clause_statistics = calculate_clause_statistics(data)
-numberOfProcessedClauses = get_number_of_processed_clauses(data)
+proofStatistics = getNumberOfSolvedProofs(data)
+clauseStatistics = calculateClauseStatistics(data)
+numberOfProcessedClauses = getNumberOfProcessedClauses(data)
 
 # Output summary information
-print(f"Total proof tasks: {proof_statistics['totalProofTasks']}")
-print(f"Tasks solved w/o LM: {proof_statistics['solvedProofsWithoutLM']}")
+print(f"Total proof tasks: {proofStatistics['totalProofTasks']}")
+print(f"Tasks solved w/o LM: {proofStatistics['solvedProofsWithoutLM']}")
 
-print(f"Total clauses w/o LM: {clause_statistics['clauseStatisticsWithoutLM']['totalProcessedClausesWithoutLM']}")
+print(f"Total clauses w/o LM: {clauseStatistics['clauseStatisticsWithoutLM']['totalProcessedClausesWithoutLM']}")
 
-print(f"Mean clauses w/o LM: {clause_statistics['clauseStatisticsWithoutLM']['meanProcessedClausesWithoutLM']}")
+print(f"Mean clauses w/o LM: {clauseStatistics['clauseStatisticsWithoutLM']['meanProcessedClausesWithoutLM']}")
 
-print(f"Std deviation of clauses w/o LM: {clause_statistics['clauseStatisticsWithoutLM']['stdDevProcessedClausesWithoutLM']}")
+print(f"Std deviation of clauses w/o LM: {clauseStatistics['clauseStatisticsWithoutLM']['stdDevProcessedClausesWithoutLM']}")
 
-print(f"Median clauses w/o LM: {clause_statistics['clauseStatisticsWithoutLM']['medianProcessedClausesWithoutLM']}")
+print(f"Median clauses w/o LM: {clauseStatistics['clauseStatisticsWithoutLM']['medianProcessedClausesWithoutLM']}")
 
 # Save results to a JSON file
 results = {
-    "proofStatistics": proof_statistics,
-    "clauseStatisticsWithoutLM": clause_statistics['clauseStatisticsWithoutLM'],
+    "proofStatistics": proofStatistics,
+    "clauseStatisticsWithoutLM": clauseStatistics['clauseStatisticsWithoutLM'],
 }
 with open('statistics.json', 'w') as outfile:
     json.dump(results, outfile, indent=4)
-

@@ -1,8 +1,20 @@
+# Importing necessary modules
 import os
 import re
 import json
 
+# Program description
+# This program iterates through the output files from the epvoer, filters for specified information, and checks whether a proof was found.
+# For comparison, data is extracted from Eprover output files in two scenarios:
+# 1. Eprover is called using a language model as heuristic.
+# 2. Eprover is invoked with the 'auto' parameter.
+# The infromation is then saved to a JSON File.
+
+# function to extract the information 
+# path: Specifies the file path to the output files from the eprover.
+# informationFilter: A list containing the names of the information to be filtered.
 def extractInformation(path, informationFilter):
+    # list to store the information
     information = []
 
     for category in os.listdir(path):
@@ -42,6 +54,7 @@ def extractInformation(path, informationFilter):
     
     return information
 
+# the information to be filtered
 informationFilter = ['Processed clauses']
 
 # Writing JSON data

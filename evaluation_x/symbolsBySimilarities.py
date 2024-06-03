@@ -1,7 +1,11 @@
+# Importing necessary modules
 from gensim.models import KeyedVectors
 import numpy as np
 import torch
 from torch.nn import CosineSimilarity
+
+# Program description
+# This program takes an embedding as input and computes the specified number of most and least similar embeddings from a collection of embeddings. It uses cosine similarity to measure the similarity between embeddings.
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
