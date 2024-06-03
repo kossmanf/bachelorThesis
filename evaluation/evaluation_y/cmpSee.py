@@ -52,11 +52,11 @@ extractConjectures(filePath2)
 
 
 # Finding duplicates within the same file path 
-# this is done by itterating over the conjectures in the dictionary and checking if there are mutlibel file paths that start with A (test data) 
+# Iterate over conjectures in the dictionary to find multiple file paths starting with 'A' (test data) that include the conjecture.
 duplicates = {conj: files for conj, files in conjecturesDict.items() if sum(1 for f in files if f.startswith("A:")) > 1}
 
 # Finding common conjectures across both file paths
-# this is done by itterating over the conjectures in the dictionary and checking if there file paths that start with A (test data) and with B (training data)
+# Iterate over the dictionary's conjectures to check if their file paths start with 'A' (test data) and 'B' (training data) which contain the conjecture.
 commonConjectures = {conj: files for conj, files in conjecturesDict.items() if any("A:" in f for f in files) and any("B:" in f for f in files)}
 
 # Save the duplicates to a JSON file
