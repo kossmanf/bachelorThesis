@@ -82,12 +82,6 @@ python generateProofsWithLM.py
 ```
 Ensure all configurations are set correctly as per your system's paths.
 
-## Notice
-The proofs without the language model is almost identical to the program that was used to generate the proofs for generating the traingn test and anaylsysis data
-The Proofs with the language model and the proofs without the language model where conpared with each other
-For trying to prove the conjectures from the `uncompletedProofs` the program ` generateProofsWithOutLM.py` 
-For performing proofs without the auto paramter and without the languge model the progrm ` generateProofsWithOutLM.py`  was used as well
-
 ## Notice 
 
 ### Proof Generation Programs
