@@ -25,7 +25,7 @@ python generateProofsWithOutLM.py
 ```
 
 ### Required directories
-- `./axioms`: Folder with the axiom files only containing the files with the conjectures that where used to proof the specified output files.
+- `./axioms`: Folder with the axiom files to be proven.
 
 ## Output
 The script will output proof results into a structured directory under `./proofsNormal` based on the category of each axiom. Each proof attempt is logged in the `proofLog.txt` file.
@@ -70,7 +70,7 @@ The script will output proof results into a structured directory under `./proofs
 
 ### Required Files and Directories
 - `./state_dict_[number].pt`: File which contains the state dict of the model after the specified trained epoch. The number specifies the trained epoch.
-- `./axioms`: Folder with the axiom files only containing the files with the conjectures that where used to proof the specified output files.
+- `./axioms`: Folder with the axiom files to be proven.
 
 ## Output
 The script will output proof results into a structured directory under `./proofs` based on the category of each axiom. Each proof attempt is logged in the `proofLog.txt` file.
