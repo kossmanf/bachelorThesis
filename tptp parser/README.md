@@ -1,5 +1,5 @@
 
-# Tree Processing Scripts
+# Parse tree processing scripts
 
 This repository contains several Python scripts that manage and interact with parse tree data structures.
 

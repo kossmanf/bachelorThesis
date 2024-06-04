@@ -1,6 +1,6 @@
 # Folder Descriptions for Generating Test, Training, and Analysis Data
 
-This repository is organized into several folders, each containing scripts and tools for different stages of generating test, training, and analysis data for language models. Below is a detailed explanation of the contents and purpose of each folder.
+This directory is organized into several folders, each containing scripts and tools for different stages of generating test, training, and analysis data for language models. Below is a detailed explanation of the contents and purpose of each folder.
 
 ## Folder Structure
 

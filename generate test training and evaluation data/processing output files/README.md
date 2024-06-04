@@ -5,7 +5,7 @@
 
 ### Overview
 This Python script processes eprover output files from the 'proofs' directory, sorting them into 'completed_proofs' and 'uncompleted_proofs' based on whether proofs were found.
-The 'uncompmleted' proofs are used as analysis data.
+The 'uncompmleted' proofs are used as evaluation data.
 
 ### Requirements
 - Python 3.x
@@ -31,7 +31,7 @@ The 'uncompmleted' proofs are used as analysis data.
 
 ### Overview
 This script divides proofs from the 'completedProofs' folder into 'trainingProofs' and 'testProofs' directories based on a specified percentage.
-The 'test' proofs are used as analysis data.
+The 'test' proofs are used as evaluation data.
 
 ### Requirements
 - Python 3.x
@@ -41,7 +41,7 @@ The 'test' proofs are used as analysis data.
 - `./completed proofs`: Folder which holds the output files of proofs which where found.
 
 ### Output
-- `./test proofs`: output files which are used for analysis.
+- `./test proofs`: output files which are used for evaluation.
 - `./training proofs`: Folder which holds the output files which are used to generate the test and training data for training the language model.
 
 ### Configuration
