@@ -28,6 +28,7 @@ def removeUnusedAxioms(axiomDirectory, usedAxioms):
 
 proofDirectory = './uncompletedProofs'
 #proofDirectory = './testProofs'
+#proofDirectory = './trainingProofs'
 
 # Collecting the axiom names 
 usedAxioms = collectAxiomNames(proofDirectory)

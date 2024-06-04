@@ -3,19 +3,23 @@
 
 ## evalEpochs.py / evalEpochs_lossFunctionComparison.py
 
-This script processes different backed-up epoch files by extracting the state disc to evaluate the trained model at each epoch using various loss functions. It requires the model and test data to function. Ensure these are properly configured before execution. It is essential to execute this before calculating residuals as it provides the necessary data for subsequent analysis.
+This script processes different backed-up epoch files by extracting the state dict to evaluate the trained model at each epoch. It requires the model and test data to function. Ensure these are properly configured before execution. The program saves the actual scores the predicted scores and the residuals between the score and predicted score for each epoch in a file named `evaluation_epoch_[number].json`. The number in the file is the epoch after which the trained model was evaluated.
 
 ## evalUntrainedModel.py
 
-This script evaluates the performance of an untrained language model using test data. It calculates residuals, predicted scores, and actual scores, and outputs them in an evaluation file.  It is essential to execute this before calculating residuals as it provides the necessary data for subsequent analysis. 
+This script evaluates the performance of an untrained language model using test data. It calculates residuals, predicted scores, and actual scores, and outputs them in an evaluation file. The program saves the actual scores the predicted scores and the residuals between the score and predicted score in a file named `evaluation.json`. 
 
 ## calculateBootstrappedStatistics.py
 
-This script performs statistical analysis using bootstrapping methods to estimate Mean Absolute Error (MAE), Mean Error (ME), and the standard deviation of absolute errors from evaluation files across training epochs. It's useful for tracking and analyzing training progress in machine learning experiments.
+This script performs statistical analysis using bootstrapping methods to estimate Mean Absolute Error (MAE), Mean Error (ME), and the standard deviation of absolute errors from the  `evaluation_epoch_[number].json` files across training epochs. The bootstrapped data is saved in `bootstrapped_data.json`.
+
+## plotScoresAndPredictedScores.py
+
+This script reads data from a JSON file (`bootstrapped_data.json`) containing bootstrapped statistical results and plots the Mean Error, Mean Absolute Error, and standard deviation of absolute errors over training epochs. The output is a line chart which helps in visualizing the performance and stability of the model across the epochs.
 
 ## plotStatistics.py
 
-This script reads data from a JSON file (`bootstrapped_data.json`) containing bootstrapped statistical results and plots the Mean Error, Mean Absolute Error, and standard deviation of absolute errors over training epochs. The output is a line chart which helps in visualizing the performance and stability of the model across the epochs.
+This script reads data from a JSON file (`evaluation_epoch_[number].json`) containing the scores and predicted scores epochs and visualizes them. 
 
 ### Usage
 
@@ -35,7 +39,12 @@ This script reads data from a JSON file (`bootstrapped_data.json`) containing bo
    python calculateBootstrappedStatistics.py
    ```
 
-3. Use `plotStatistics.py` to visualize the data:
+3. Use `plotScoresAndPredictedScores.py` to visualize the actual scores and the predicted scores:
+   ```
+   python plotStatistics.py
+   ```
+
+4. Use `plotStatistics.py` to visualize the statistical data:
    ```
    python plotStatistics.py
    ```
@@ -43,7 +52,7 @@ This script reads data from a JSON file (`bootstrapped_data.json`) containing bo
 ### Requirements
 
 Before running the scripts, ensure you have the following:
-- A trained model
+- The `checkpoint_epoch_[number].pt` files generated during the training of the model
 - Test data
 
 These components are crucial for the scripts to function as intended.

@@ -1,4 +1,3 @@
-
 # README for training scripts
 
 ## training_lossFunctionComparison.py
@@ -37,6 +36,7 @@ The script requires a `.pt` file containing the dataset, structured with keys `v
 ### Output
 - Checkpoint files for each epoch.
 - A final model saved as `final_model.pt`.
+- The `checkpoint_epoch_{epoch}.pt` after every trained epoch.
 
 ## training_mseLoss.py
 
@@ -72,3 +72,4 @@ The script expects a `.pt` file formatted with `verbalizedGoals`, `symbolNames`,
 ### Output
 - Epoch-specific checkpoint files containing model state and optimizer details.
 - A final model saved in the file `final_model.pt`.
+- The `checkpoint_epoch_{epoch}.pt` after every trained epoch.
