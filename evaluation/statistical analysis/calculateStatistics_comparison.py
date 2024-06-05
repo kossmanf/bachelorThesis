@@ -57,6 +57,7 @@ def calculateClauseStatistics(data):
     clausesWithoutLm = processedClauses['numProcessedClausesWithoutLm']
     clausesWithLm = processedClauses['numProcessedClausesWithLm']
 
+    # plotting the number of processed clauses with and without the use of the languge model
     # Set up a figure with two subplots (1 row, 2 columns)
     plt.figure(figsize=(12, 6))  # Adjust the size as needed
 
@@ -132,6 +133,7 @@ def calcAveragePercentageReduction(xData, yData):
     sortedPercentageReduction = np.sort(percentageReductions)
     trimmedPercentageReduction = [x for x in percentageReductions if x not in sortedPercentageReduction[:trimValue]]
 
+    # plot the reduction percentages
     # Set up a figure with two subplots (1 row, 2 columns)
     plt.figure(figsize=(12, 6))  # Adjust the size as needed
 

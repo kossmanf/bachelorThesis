@@ -15,6 +15,9 @@ This repository contains several Python scripts that manage and interact with pa
 4. **treeDataStructure.py**
    - Defines a basic tree data structure for the parse tree in Python with a class `Node` that can store values and child nodes, supporting the creation and manipulation of tree-like structures.
 
+5. **parseFormulas.py**
+   - Takes the parse tree of a formula and a mapping for the the operators and a mapping form Adimen-SUMO Symbols to natural language and generates a sentence in natural language for the formula.
+
 ## Usage
 
 Each script can be run independently, depending on the specific tree processing needs. Ensure that Python 3 is installed and that each script is in the same directory for proper module interaction.

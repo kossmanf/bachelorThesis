@@ -1,14 +1,20 @@
+# Importing necessary modules
 import json
 import matplotlib.pyplot as plt
 import numpy as np
+
+# Program description
+# This script plots the residuals of processed clauses using Eprover, comparing results with and without the integration of a language model.
 
 # Reading JSON data
 with open('extractedInformation.json', 'r') as file:
     data = json.load(file)
 
+# xData are the processed clauses without the integration of the languge mdoel and yData the processed clauses with the use of the language model
 xAxisData = []
 yAxisData = []
 
+# Iterating over all the extrcted information finding the number of processed clauses of proofs which have been found with and without the use of the language model
 for proofInformationDict1 in data['proofsNormal']:
     if proofInformationDict1['proofFound'] == 't' and proofInformationDict1['Processed clauses'] != '': 
         for proofInformationDict2 in data['proofs']:

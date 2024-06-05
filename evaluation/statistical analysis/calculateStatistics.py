@@ -8,10 +8,10 @@ import matplotlib.pyplot as plt
 # This Program calculates the following statistical measures based on the extracted information about the number of processed clauses and whether a proof was found 
 # These statistics provide insights into the performance and efficiency of the eprover, without the use of Language Models (LM).
 # `totalProofTasks`: Indicates the total number of proof tasks processed.
-# `solvedProofsWithoutLM` : Show the count of tasks solved without and with the aid of language models, respectively.
+# `solvedProofsWithoutLM` : Show the count of tasks solved without the aid of language model, respectively.
 # Clause-related statistics:
-# `totalProcessedClausesWithoutLM` : Total clauses processed without and with language models.
-# `meanProcessedClausesWithoutLM` : Average number of clauses processed per task, without and with language models.
+# `totalProcessedClausesWithoutLM` : Total clauses processed without the language model.
+# `meanProcessedClausesWithoutLM` : Average number of clauses processed per task, without the language model.
 # `stdDevProcessedClausesWithoutLM` : Standard deviation of the number of processed clauses, providing a measure of variability.
 # `medianProcessedClausesWithoutLM` : Median number of clauses processed, indicating the central tendency.
 # The the number of processed clauses is visualized in a graph
@@ -21,7 +21,7 @@ import matplotlib.pyplot as plt
 with open('extractedInformation.json', 'r') as file:
     data = json.load(file)
 
-# Function to gather the number of processed clauses with and without Learning Modules (LM)
+# Function to gather the number of processed clauses without language Modules (LM)
 def getNumberOfProcessedClauses(data):
     clausesWithoutLM = []
     for normalProof in data['proofsNormal']:
@@ -40,7 +40,7 @@ def getNumberOfSolvedProofs(data):
         'solvedProofsWithoutLM': numProofsNormal,
     }
 
-# Function to calculate statistics about the number of processed clauses with and without LM
+# Function to calculate statistics about the number of processed clauses without LM
 def calculateClauseStatistics(data):
     processedClauses = getNumberOfProcessedClauses(data)
     clausesWithoutLM = processedClauses['numProcessedClausesWithoutLM']
