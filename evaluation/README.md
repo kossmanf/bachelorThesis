@@ -1,4 +1,4 @@
-# Evaluation Tools README
+# Evaluation Tools
 
 This Folder contains organized folders, each dedicated to a specific aspect of the evaluation process.
 
