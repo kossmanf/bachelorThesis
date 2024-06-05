@@ -22,7 +22,7 @@ Contains programs to get information about the environment under which the evalu
 This project requires a local installation of the Eprover.  The Eprover can be downloaded from https://github.com/eprover/eprover
 
 ## Usage
-Refer to the README.md files in each directory for detailed instructions on how to run the programs within. Ensure that you have the necessary Python environment and dependencies installed.
+Read the README.md files in each directory for detailed instructions on how to run the programs within. Ensure that you have the necessary Python environment and dependencies installed.
 
 ## License
 This project is licensed under the MIT License.
